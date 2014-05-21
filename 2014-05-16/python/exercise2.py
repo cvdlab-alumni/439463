@@ -302,15 +302,6 @@ strutturasenzatetto = Struct([balcone,strutturasenzatetto])
 
 
 ''' *********************** ESERCIZIO 2 ************************* '''
-#DEFINIZIONE DELLE SCALE
-def scala():
-	V = [[0,0,0],[1,0,0],[1,2,0],[0,2,0],
-	[0,0,1],[1,0,1],[1,2,1],[0,2,1]]
-	FV = [[0,1,2,3,4,5,6,7]]
-	a = V,FV
-	scala = Struct([a,larApply(t(1,0,0.5))(a),larApply(t(2,0,1))(a),larApply(t(3,0,1.5))(a),larApply(t(4,0,2))(a)])
-	return scala
-
 
 '''Realizzo l'ingresso in cui si accede all'edificio '''
 ingresso =assemblyDiagramInit([3,3,3])([[0.3,2,0.3],[0.3,4,0.3],[0.2,2,0.2]])
