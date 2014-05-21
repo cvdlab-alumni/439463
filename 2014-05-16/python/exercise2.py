@@ -16,6 +16,7 @@ from splines import *
 def DRAW(lar) :
     VIEW(SKEL_1(STRUCT(MKPOLS(lar))))
 
+marrone = [0.8,0.4,0.3]
     
 ''' ***************************ESERCIZIO 1 *************'''
 #appartamento giuliani
@@ -248,6 +249,10 @@ master = diagram2cell(door,master,toMerge)
 hpc = SKEL_1(STRUCT(MKPOLS(master)))
 hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,1)
 #VIEW(hpc)
+'''
+porta = assemblyDiagramInit([1,1,2])([[0.8],[0.4],[1.8,0.5]])
+porta = larApply(t(4,0,0))(porta)
+porta = COLOR(marrone)(STRUCT(MKPOLS(porta)))'''
 
 ''' rimuovo la cella contenente la porta'''
 toRemove = [276]
@@ -257,6 +262,30 @@ hpc = SKEL_1(STRUCT(MKPOLS(master)))
 hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,1)
 #VIEW(hpc)
 
+'''realizzo la porta finestra verso il balcone '''
+toMerge = 144
+door = assemblyDiagramInit([1,3,2])([[0.3],[0.5,0.8,0.5],[1.8,.5]])
+master = diagram2cell(door,master,toMerge)
+hpc = SKEL_1(STRUCT(MKPOLS(master)))
+hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,1)
+#VIEW(hpc)
+
+toRemove = [280]
+master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
+hpc = SKEL_1(STRUCT(MKPOLS(master)))
+hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,0.5)
+#VIEW(hpc)
+
+''' creo il balcone '''
+balcone = assemblyDiagramInit([3,3,3])([[0.2,2,0.2],[0.2,3,0.2],[0.2,1,0.2]])
+balcone = larApply(t(9.9,0.5,0))(balcone)
+hpc = SKEL_1(STRUCT(MKPOLS(balcone)))
+hpc = cellNumbering(balcone,hpc)(range(len(balcone[1])),CYAN,1)
+#VIEW(hpc)
+
+toRemove = [4,5,3,13,14]
+balcone = balcone[0], [cell for k,cell in enumerate(balcone[1]) if not (k in toRemove)]
+
 
 '''tolgo il tetto per far visualizzare la struttura '''
 toRemove = [28,29,77,76,121,122,35,34,81,80,126,125,41,40,84,85,131,132,135,136,90,89,44,45]
@@ -264,55 +293,50 @@ strutturasenzatetto = master[0], [cell for k,cell in enumerate(master[1]) if not
 #VIEW(STRUCT(MKPOLS(strutturasenzatetto)))
 hpc = cellNumbering (strutturasenzatetto,hpc)(range(len(strutturasenzatetto[1])),CYAN,1)
 #VIEW(hpc)
+strutturasenzatetto = Struct([balcone,strutturasenzatetto])
 
+#VIEW(STRUCT(MKPOLS(casa)))
+#VIEW(STRUCT(CAT(AA(MKPOLS)(casa))))
 
 
 
 
 ''' *********************** ESERCIZIO 2 ************************* '''
 #DEFINIZIONE DELLE SCALE
-def rampa():
-	element = CUBOID([0.6,0.4,0.1])
-	column = STRUCT(CAT(N(24)([element, T([2,3])([0.1,0.1])])))
-	return column
-#VIEW(rampa(2))
+def scala():
+	V = [[0,0,0],[1,0,0],[1,2,0],[0,2,0],
+	[0,0,1],[1,0,1],[1,2,1],[0,2,1]]
+	FV = [[0,1,2,3,4,5,6,7]]
+	a = V,FV
+	scala = Struct([a,larApply(t(1,0,0.5))(a),larApply(t(2,0,1))(a),larApply(t(3,0,1.5))(a),larApply(t(4,0,2))(a)])
+	return scala
+
+
+'''Realizzo l'ingresso in cui si accede all'edificio '''
 ingresso =assemblyDiagramInit([3,3,3])([[0.3,2,0.3],[0.3,4,0.3],[0.2,2,0.2]])
 toRemove = [13]
 ingresso = ingresso[0], [cell for k,cell in enumerate(ingresso[1]) if not (k in toRemove)]
 ingressosenzaporta = ingresso
-hpc = SKEL_1(STRUCT(MKPOLS(ingresso)))
-hpc = cellNumbering (ingresso,hpc)(range(len(ingresso[1])),CYAN,2)
-#VIEW(hpc)
 
 '''CREO LA PORTA PER L'INGRESSO'''
 toMerge = 21
 door = assemblyDiagramInit([1,3,2])([[.2],[0.5,0.8,0.4],[1.8,.5]])
 ingresso = diagram2cell(door,ingresso,toMerge)
-hpc = SKEL_1(STRUCT(MKPOLS(ingresso)))
-hpc = cellNumbering (ingresso,hpc)(range(len(ingresso[1])),CYAN,1)
-#VIEW(hpc)
 toRemove = [27]
 ingresso = ingresso[0], [cell for k,cell in enumerate(ingresso[1]) if not (k in toRemove)]
-hpc = SKEL_1(STRUCT(MKPOLS(ingressosenzaporta)))
-hpc = cellNumbering (ingressosenzaporta,hpc)(range(len(ingressosenzaporta[1])),CYAN,1)
-#VIEW(hpc)
 
-'''creo la porta per l'appartamento'''
+'''creo la porta verso l'appartamento'''
 toMerge = 15
 door = assemblyDiagramInit([3,1,2])([[0.5,0.8,0.5],[.3],[1.8,.5]])
 ingresso = diagram2cell(door,ingresso,toMerge)
 ingressosenzaporta = diagram2cell(door,ingressosenzaporta,toMerge)
-hpc = SKEL_1(STRUCT(MKPOLS(ingressosenzaporta)))
-hpc = cellNumbering (ingressosenzaporta,hpc)(range(len(ingressosenzaporta[1])),CYAN,1)
-#VIEW(hpc)
 toRemove = [31]
 toRemove2 = [27] #per senza porta
 ingresso = ingresso[0], [cell for k,cell in enumerate(ingresso[1]) if not (k in toRemove)]
 ingressosenzaporta = ingressosenzaporta[0], [cell for k,cell in enumerate(ingressosenzaporta[1]) if not (k in toRemove2)]
-hpc = SKEL_1(STRUCT(MKPOLS(ingressosenzaporta)))
-hpc = cellNumbering (ingressosenzaporta,hpc)(range(len(ingressosenzaporta[1])),CYAN,1)
-#VIEW(hpc)
+ingressosenzaportasenzascale = ingressosenzaporta
 
+'''creo lo spazio per le scale nel pavimento superiore'''
 vuoto = assemblyDiagramInit([3,3,3])([[0.1,1,0.3],[0.4,0.8,0.5],[0.2,2,0.2]])
 toMerge = 13
 ingresso = diagram2cell(vuoto,ingresso,toMerge)
@@ -321,52 +345,46 @@ toRemove = [45,46,47]
 toRemove2 = [41,42,43]
 ingresso = ingresso[0], [cell for k,cell in enumerate(ingresso[1]) if not (k in toRemove)]
 ingressosenzaporta = ingressosenzaporta[0], [cell for k,cell in enumerate(ingressosenzaporta[1]) if not (k in toRemove2)]
-hpc = SKEL_1(STRUCT(MKPOLS(ingressosenzaporta)))
-#VIEW(STRUCT(MKPOLS(ingressosenzaporta)))
-hpc = cellNumbering (ingressosenzaporta,hpc)(range(len(ingressosenzaporta[1])),CYAN,1)
-#VIEW(hpc)
 
 toMerge = 12
 ingressosenzaporta = diagram2cell(vuoto,ingressosenzaporta,toMerge)
 toRemove = [64,65,66]
 ingressosenzaporta = ingressosenzaporta[0], [cell for k,cell in enumerate(ingressosenzaporta[1]) if not (k in toRemove)]
-#VIEW(STRUCT(MKPOLS(ingressosenzaporta)))
-hpc = SKEL_1(STRUCT(MKPOLS(ingressosenzaporta)))
-hpc = cellNumbering (ingressosenzaporta,hpc)(range(len(ingressosenzaporta[1])),CYAN,1)
-#VIEW(hpc)
 
-scale = T([1,2])([0.5,0.5])(rampa())
-ingresso = STRUCT(MKPOLS(ingresso))
-ingresso = STRUCT([scale,ingresso])
-ingressosenzaporta = STRUCT(MKPOLS(ingressosenzaporta))
+V = [[3.8,-3.2,0],[4.8,-3.2,0],[4.8,-2.7,0],[3.8,-2.7,0],
+	[3.8,-3.2,0.4],[4.8,-3.2,0.4],[4.8,-2.7,0.4],[3.8,-2.7,0.4]]
+FV = [[0,1,2,3,4,5,6,7]]
+a = V,FV
+scala = Struct([a,larApply(t(0,0.2,0.3))(a),larApply(t(0,0.4,0.6))(a),larApply(t(0,0.6,0.9))(a),larApply(t(0,0.8,1.2))(a),
+	larApply(t(0,1,1.5))(a),larApply(t(0,1.2,1.8))(a),larApply(t(0,1.4,2))(a)])
+
+ingresso = larApply(t(3.3,-4.5,0))(ingresso)
+ingresso = Struct([ingresso])
+ingresso = AA(MKPOLS)(ingresso) + AA(MKPOLS)(scala) 
+
+ingressosenzaporta = larApply(t(3.3,-4.5,0))(ingressosenzaporta)
+ingressosenzaporta = Struct([ingressosenzaporta])
 ingressosenzaportasenzascale = ingressosenzaporta
-ingressosenzaporta = STRUCT([scale,ingressosenzaporta])
-ingressosenzaporta = STRUCT([scale,ingressosenzaporta])
-ingresso = T([1,2])([3.3,-4.5])(ingresso)
-ingressosenzaporta = T([1,2])([3.3,-4.5])(ingressosenzaporta)
-ingressosenzaportasenzascale = T([1,2])([3.3,-4.5])(ingressosenzaportasenzascale)
-#VIEW(hpc)
+ingressosenzaporta = AA(MKPOLS)(ingressosenzaporta)+ AA(MKPOLS)(scala)
 
-E=STRUCT(MKPOLS(strutturasenzatetto))
-struttura = STRUCT([E,ingresso])
-strutturasenzaporta = STRUCT([E,ingressosenzaporta])
-strutturasenzaportasenzascale = STRUCT([E,ingressosenzaportasenzascale])
-#VIEW(struttura)
-
-appartamento = struttura
-appartamento2 = T(3)(2.4)(strutturasenzaporta)
-appartamento3 = T(3)(4.8)(strutturasenzaporta)
+strutturasenzaportasenzascale = AA(MKPOLS)(strutturasenzatetto) + AA(MKPOLS)(ingressosenzaportasenzascale)
+struttura = AA(MKPOLS)(strutturasenzatetto) + ingresso
+strutturasenzaporta = ingressosenzaporta + AA(MKPOLS)(strutturasenzatetto)
+strutturasenzaporta =STRUCT(CAT(strutturasenzaporta))
+appartamento = STRUCT(CAT(struttura)) #primo piani
+appartamento2 = T(3)(2.4)(strutturasenzaporta) #secondo piano
+appartamento3 = T(3)(4.8)(strutturasenzaporta) #terzo piano
+strutturasenzaportasenzascale = STRUCT(CAT(strutturasenzaportasenzascale)) #quarto piano
 appartamento4 = T(3)(7.2)(strutturasenzaportasenzascale)
 copertura = assemblyDiagramInit([1,1,1])([[10.2],[10.5],[1]])
 copertura = T(3)(9.6)(STRUCT(MKPOLS(copertura)))
 copertura2 = assemblyDiagramInit([1,1,1])([[2.6],[4.5],[0.2]])
 copertura2 = T([1,2,3])([3.3,-4.5,9.6])(STRUCT(MKPOLS(copertura2)))
 palazzo = STRUCT([appartamento,appartamento2,appartamento3,appartamento4,copertura,copertura2])
-#VIEW(palazzo)
 
-palazzo2 = T([1,2])([10,5])(palazzo)
+palazzo2 = T([1,2])([12,5])(palazzo)
 palazzo2 = R([1,2])(-PI/6)(palazzo2)
-palazzo3 = T([1,2])([10,5])(palazzo)
+palazzo3 = T([1,2])([12,5])(palazzo)
 palazzo3 = T([1,2])([16,3])(R([1,2])(-PI/2)(palazzo3))
 #VIEW(STRUCT([palazzo,palazzo2,palazzo3]))
 
@@ -383,7 +401,7 @@ obj2 = MAP(b)(dom1)
 obj3 = MAP(c)(dom1)
 obj4 = MAP(d)(dom1)
 prato = COLOR(GREEN)(SOLIDIFY(STRUCT([obj1,obj2,obj3,obj4])))
-prato = T([1,2])([-5,-30])(S([1,2])([5,5])(prato))
+prato = T([1,2])([-20,-40])(S([1,2])([5,5])(prato))
 #VIEW(STRUCT([palazzo,palazzo2,palazzo3,prato]))
 
 

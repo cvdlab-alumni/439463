@@ -250,15 +250,45 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,1)
 toRemove = [276]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
 hpc = SKEL_1(STRUCT(MKPOLS(master)))
+hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,0.5)
+#VIEW(hpc)
+
+'''realizzo la porta finestra verso il balcone '''
+toMerge = 144
+door = assemblyDiagramInit([1,3,2])([[0.3],[0.5,0.8,0.5],[1.8,.5]])
+master = diagram2cell(door,master,toMerge)
+hpc = SKEL_1(STRUCT(MKPOLS(master)))
 hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,1)
 #VIEW(hpc)
+
+toRemove = [280]
+master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
+hpc = SKEL_1(STRUCT(MKPOLS(master)))
+hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,0.5)
+#VIEW(hpc)
+
+''' creo il balcone '''
+balcone = assemblyDiagramInit([3,3,3])([[0.2,2,0.2],[0.2,3,0.2],[0.2,1,0.2]])
+balcone = larApply(t(9.9,0.5,0))(balcone)
+hpc = SKEL_1(STRUCT(MKPOLS(balcone)))
+hpc = cellNumbering(balcone,hpc)(range(len(balcone[1])),CYAN,1)
+#VIEW(hpc)
+
+toRemove = [4,5,3,13,14]
+balcone = balcone[0], [cell for k,cell in enumerate(balcone[1]) if not (k in toRemove)]
 
 
 '''tolgo il tetto per far visualizzare la struttura '''
 toRemove = [28,29,77,76,121,122,35,34,81,80,126,125,41,40,84,85,131,132,135,136,90,89,44,45]
 strutturasenzatetto = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-VIEW(STRUCT(MKPOLS(strutturasenzatetto)))
-hpc = cellNumbering (strutturasenzatetto,hpc)(range(len(strutturasenzatetto[1])),CYAN,1)
+#a = TEXTURE('C:\Users\Valentina\Desktop\Universita\Grafica Computazionale\muro.png')(STRUCT(MKPOLS(strutturasenzatetto)))
+#VIEW(STRUCT([a]))
+VIEW(STRUCT(MKPOLS(strutturasenzatetto)+MKPOLS(balcone)))
+hpc = cellNumbering (strutturasenzatetto,hpc)(range(len(strutturasenzatetto[1])),CYAN,0.5)
 #VIEW(hpc)
+
+
+
+
 
 
