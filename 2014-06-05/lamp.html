@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <title>Lamp- Valentina Giuliani</title> 
+  <style>
+    body{
+      margin: 0;
+      overflow: hidden;
+    }
+  </style> 
+  </head> 
+  <body>
+    <!-- JavaScript libraries -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script>  
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+	<script src="assets/libs/TrackballControls.js"></script>
+	<script src="assets/libs/GeometryExporter.js"></script>
+	<script src="assets/libs/JSONLoader.js"></script>
+	<script type="text/javascript" src="assets/fonts/helvetiker_regular.typeface.js"></script> 
+	<script type="text/javascript" src="assets/fonts/helvetiker_bold.typeface.js"></script> 
+	<script type="text/javascript" src="assets/fonts/bitstream_vera_sans_mono_roman.typeface.js"></script> 
+	<script src="assets/libs/tween.min.js"></script>
+	<script src="assets/libs/keyframe.js"></script>
+    <!-- Javascript code that runs our Three.js examples --> 
+    <script>
+      
+      $(function () {
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+			var renderer = new THREE.WebGLRenderer();
+			var trackballControls = new THREE.TrackballControls(camera);
+		
+			renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.shadowMapEnabled = true;
+			
+			camera.position.x = 0;
+			camera.position.y = -120;
+			camera.position.z = 50;
+			camera.lookAt(new THREE.Vector3(0, 0, 1));
+			
+			//definizione del piano su cui poggia la lampada
+			var planeGeometry = new THREE.PlaneGeometry(100,100,60,60);
+			var planeMaterial =  new THREE.MeshLambertMaterial({color: 0xc0c0c0});
+			planeMaterial.side = THREE.DoubleSide;			
+			var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+			plane.receiveShadow = true; // sul piano saranno proiettate le ombre degli oggetti
+			
+			
+			plane.position.set(0,0,0);			
+			scene.add(plane);
+			
+			/*
+			//aggiungo una ambient light a tutta la scena
+			var ambiColor = "#0c0c0c";
+			var ambientLight = new THREE.AmbientLight(ambiColor); //luce presente in tutta la scena
+			scene.add(ambientLight);
+			*/
+			
+			//base della lampada
+			var baseGeometry = new THREE.CylinderGeometry(4.5,5,1,32);
+			var baseMaterial =  new THREE.MeshLambertMaterial({color: 0x666666}); 
+			var base = new THREE.Mesh(baseGeometry,baseMaterial);
+			base.castShadow = true;
+			scene.add(base);
+			base.rotation.x = 0.5*Math.PI;
+			base.position.set(0,0,0.5);
+			
+			
+			var temp = new THREE.Object3D();
+			function bracci(r, h) {
+				var perno = new THREE.Object3D();
+          
+				var sphereGeometry = new THREE.SphereGeometry(r,8,8);
+				var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x404040});
+				var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+				sphere.castShadow = true;
+				sphere.position.set(0,0,0);
+
+				var cylinderGeometry = new THREE.CylinderGeometry(r,r,h,8,8,false);
+				var cylinderMaterial = new THREE.MeshLambertMaterial({color: 0x2F2F2F});
+				var cylinder = new THREE.Mesh(cylinderGeometry,cylinderMaterial);
+				cylinder.castShadow = true;
+				cylinder.position.set(0,0,h/2+r);
+				cylinder.rotation.x = Math.PI/2;
+          
+
+				var perno2 = new THREE.Object3D();
+				perno2.position.set(0,h/2+r,0);
+				perno2.rotation.x = -Math.PI/2;
+          
+
+				perno.add(sphere);
+				sphere.add(cylinder);
+				cylinder.add(perno2);
+
+				perno.sphere = sphere;
+				perno.cylinder = cylinder;
+				perno.perno2 = perno2;
+
+				return perno;
+			}
+			
+			var braccio1 = bracci(1,10);
+			braccio1.position.set(0,0,2)
+			//scene.add(braccio1);
+			var braccio2 = bracci(1,10);
+			braccio1.perno2.add(braccio2);
+			
+			var lamp = new THREE.Object3D();
+			lamp.add(base);
+			lamp.add(braccio1);
+			scene.add(lamp);
+			
+			var app =new THREE.Object3D();
+			app.add(lamp);
+			scene.add(app);
+
+			//ultima sfera prima della lampada
+			var lastsphereGeometry = new THREE.SphereGeometry(1,8,8);
+			var lastsphereMaterial =  new THREE.MeshLambertMaterial({color: 0x404040}); 
+			var lastsphere = new THREE.Mesh(lastsphereGeometry,lastsphereMaterial);
+			lastsphere.castShadow = true;
+			braccio2.perno2.add(lastsphere);
+		
+			//semicirconferenza
+			var semisphereGeometry = new THREE.SphereGeometry(5,32,32,Math.PI,Math.PI,0,-Math.PI);
+			var semisphereMaterial =  new THREE.MeshLambertMaterial({color: 0x8F8F8F});
+			semisphereMaterial.side = THREE.DoubleSide;			
+			var semisphere = new THREE.Mesh(semisphereGeometry,semisphereMaterial);
+			semisphere.castShadow = true;
+			semisphere.rotation.x = Math.PI;
+			semisphere.position.set(0,0,6);
+			lastsphere.add(semisphere);
+			
+			//lampadina
+			var lampadinaGeometry = new THREE.SphereGeometry(1.5,32,32);
+			var lampadinaMaterial =  new THREE.MeshLambertMaterial({color: 0xffff00}); 
+			lampadinaMaterial.opacity = 0.3;
+			var lampadina = new THREE.Mesh(lampadinaGeometry,lampadinaMaterial);
+			lampadina.castShadow = true;
+			lampadina.position.set(0,0,2.5);
+			lastsphere.add(lampadina);
+			
+			//aggiungo un oggetto sotto la luce della lampada
+			var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
+			var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff3333});
+			var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+			cube.castShadow=true;
+			cube.position.set(20,20,2);
+			plane.add(cube);0
+			
+			
+			// aggiugno una spot light che ricopre tutto il plane
+			var spotLight = new THREE.SpotLight(0xffffff);
+			spotLight.position.set(-60, -60, 60);
+			spotLight.castShadow = true;
+			spotLight.intensity = 1;
+			spotLight.shadowCameraNear = 10;
+			spotLight.shadowCameraFar = 200;
+			scene.add(spotLight);
+			
+			var intensity = 1.25;
+			
+			// aggiugno una spot light che parte dalla lampadina
+			var spotLight2 = new THREE.SpotLight(0xffffff);
+			spotLight2.shadowMapWidth = 2048; 
+			spotLight2.intensity = intensity;
+			spotLight2.position.set(0,0,0);
+			spotLight2.castShadow = true;
+			var target = new THREE.Object3D();
+			target.position.set(0,0,1);
+			spotLight2.target = target;
+			lampadina.add(spotLight2);
+			lampadina.add(target);
+			spotLight2.shadowCameraNear = 10;
+			
+			var pointLight = new THREE.PointLight(0xffffff,100,6);
+			pointLight.target = lampadina;
+			pointLight.castShadow = true;
+			pointLight.position.set(0,0,4.5);
+			lampadina.add(pointLight);
+			
+			//scritta CVD-LAB
+			var text1;
+			var text2;
+			
+			// add the output of the renderer to the html element
+			$('body').append(renderer.domElement);
+			
+			//vengono definiti i controlli per le modifiche
+			var controls = new function () {
+				this.showAxisHelper = true;
+				this.translationXlamp = 0.0;
+				this.translationYlamp = 0.0;
+				this.alpha =4.6;
+				this.beta = 0.00;
+				this.gamma = 1;
+				this.delta = 4;	
+				this.epsilon = 1.6;
+				this.lampOn = true;
+				
+				this.size = 11.1;
+				this.height =2;
+				this.bevelThickness = 2;
+				this.bevelSize = 0.5;
+				this.bevelEnabled = true;
+				this.bevelSegments = 0;
+				this.bevelEnabled = true;
+				this.curveSegments = 12;
+				this.steps = 1;
+				this.font = "helvetiker";
+				this.weight = "normal";
+				// this.style = "italics";
+
+				this.asGeom = function () {
+				// remove the old text
+				scene.remove(text1);
+				scene.remove(text2);
+				// create a new one
+
+				var options = {
+					size: controls.size,
+					height: controls.height,
+					weight: controls.weight,
+					font: controls.font,
+					bevelThickness: controls.bevelThickness,
+					bevelSize: controls.bevelSize,
+					bevelSegments: controls.bevelSegments,
+					bevelEnabled: controls.bevelEnabled,
+					curveSegments: controls.curveSegments,
+					steps: controls.steps};
+				console.log(THREE.FontUtils.faces);
+				text1 = createMesh(new THREE.TextGeometry("C", options));
+				text1.position.z = 0;
+				text1.position.y = -25;
+				text1.position.x = -20;
+				text2 = createMesh(new THREE.TextGeometry("VD-LAB",options));
+				text2.position.z = 0;
+				text2.position.y = -25;
+				text2.position.x = -10;
+				scene.add(text1);
+				scene.add(text2);
+				text1.rotation.x = Math.PI/2;
+				text2.rotation.x = Math.PI/2;
+				text1.castShadow=true;
+				text2.castShadow=true;
+				};
+		};		
+		
+		controls.asGeom();
+			var gui = new dat.GUI(); 
+			var axis_control = gui.add(controls, 'showAxisHelper');
+			var translationXlamp_control = gui.add(controls,'translationXlamp',-25,25);
+			var translationYlamp_control = gui.add(controls,'translationYlamp',-25,25);
+			var alpha_control = gui.add(controls,'alpha',0,2*Math.PI);
+			var beta_control = gui.add(controls,'beta',0,Math.PI/2);
+			var gamma_control = gui.add(controls,'gamma',0,Math.PI/2);
+			var delta_control = gui.add(controls,'delta',0,2*Math.PI);
+			var epsilon_control = gui.add(controls,'epsilon',0,Math.PI/2);
+			var lampOn_control = gui.add(controls,'lampOn');
+			
+			var axisHelper = new THREE.AxisHelper(3);
+			scene.add(axisHelper);
+			
+			axis_control.onChange(function (value) {
+				axisHelper.visible = value;
+			});
+			
+			lampOn_control.onChange(function(value){				
+				
+				if(!controls.lampOn){
+					spotLight2.intensity=0;
+					spotLight2.shadowDarkness = 0;
+					pointLight.intensity=0;
+					pointLight.shadowDarkness = 0;
+					
+				}
+				else{
+					spotLight2.intensity=intensity;
+					spotLight2.shadowDarkness = 0.5;
+					pointLight.intensity=100;
+					pointLight.shadowDarkness = 0.5;
+				}
+				
+			});
+			
+		gui.add(controls, 'size', 0, 200).onChange(controls.asGeom);
+		gui.add(controls, 'height', 0, 200).onChange(controls.asGeom);
+		gui.add(controls, 'font', ['bitstream vera sans mono', 'helvetiker']).onChange(controls.asGeom);
+		gui.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
+		gui.add(controls, 'bevelSize', 0, 10).onChange(controls.asGeom);
+		gui.add(controls, 'bevelSegments', 0, 30).step(1).onChange(controls.asGeom);
+		gui.add(controls, 'bevelEnabled').onChange(controls.asGeom);
+		gui.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
+		gui.add(controls, 'steps', 1, 5).step(1).onChange(controls.asGeom);
+	
+		//animations
+		
+		var braccio2TweenRot2 = new TWEEN.Tween(braccio2.rotation)
+        .to({ x: 0, y: 0, z: -Math.PI/2}, 2000)
+        .delay(1000);;
+		
+		var braccio2TweenRot = new TWEEN.Tween(braccio2.rotation)
+        .to({ x: 0, y: 0, z: -Math.PI/4}, 1000)
+		.chain(braccio2TweenRot2);
+		
+		//animazione che porta la lampada sullo stesso piano della scritta
+		var lampTween2 = new TWEEN.Tween(lamp.position)
+        .to({ x: -35, y: -25, z: 0}, 2000)
+		.chain(braccio2TweenRot);
+		
+		//viene ruotato il braccio, la lampada vede la scritta
+		var braccio2Tween = new TWEEN.Tween(braccio2.rotation)
+        .to({ x: 0, y: 0, z: -Math.PI/2}, 2000)
+		.chain(lampTween2);
+		
+		//prima animazione
+		var lampTween = new TWEEN.Tween(lamp.position)
+        .to({ x: -30, y: 3, z: 0}, 2000)
+		.chain(braccio2Tween)
+        .start();        
+	
+	
+		//define animations
+      var animator = null;
+      var duration = 11.5; // sec
+      var loopAnimation = false;
+
+      function initAnimator() {
+        animator = new KF.KeyFrameAnimator;
+        animator.init({ 
+          interps:
+            [
+              { 
+                keys:[0.95,0.954,0.958,0.962,0.966,0.970,0.974,0.978,0.982,0.986,0.990,0.994,0.998], //intervalli intermedi in cui definire diverse configurazioni e sotto specifico le configurazioni
+                values:[
+                  //primo salto
+                  { x: -35,y:-25 ,z:0},
+                  { x:-34,y:-25,z : 1 },
+                  {	x:-32,y:-25,z:1.5},
+                  {	x:-31.,y:-25,z:2},
+                  {	x:-30,y:-25,z:1.5},
+                  { x:-29,y:-25,z:1 },
+                  { x:-28, y:-25 ,z:0}, //finoa 0.962
+                  //secondo salto
+                  { x:-27,y:-25,z : 1 },
+                  {	x:-26,y:-26,z:1.5},
+                  {	x:-25.,y:-27,z:2},
+                  {	x:-24,y:-28,z:1.5},
+                  { x:-23,y:-29,z:1 },
+                  { x:-22, y:-30 ,z:0}
+
+                ],
+                target:lamp.position
+              },
+            ],
+          loop: loopAnimation,
+          duration: duration * 1000
+        });
+      }
+
+    initAnimator();
+    animator.start();
+      
+    lamp.position.set(-22,-33,0);
+
+
+    //ultime animazioni
+    var c = new TWEEN.Tween(lampadina.rotation)
+    	.to({x:0,y:0,z:Math.PI},1000);
+
+    var b = new TWEEN.Tween(braccio2.rotation)
+    	.to({x:0,y:0,z:Math.PI*1.4},1000)
+    	.chain(c);
+
+    var a = new TWEEN.Tween(braccio1.perno2.rotation)
+        .to({ x: -Math.PI/2, y: 0, z:0}, 1000)
+        .chain(b);
+
+	//animazioni sopra la c
+	var abbassalettera = new TWEEN.Tween(text1.scale)
+        .to({ x:0, y:0, z:0}, 300)
+        .delay(13000)
+        .start();
+
+
+	var schiacciaTween = new TWEEN.Tween(lamp.position)
+        .to({ x: -16, y: -27, z: 0}, 100)
+        .chain(a);
+
+	var altaTween = new TWEEN.Tween(lamp.position)
+        .to({ x: -16, y: -27, z: 14}, 100)
+        .chain(schiacciaTween);
+
+	var saltaTween = new TWEEN.Tween(lamp.position)
+        .to({ x: -16, y: -27, z: 12}, 500)
+        .easing(TWEEN.Easing.Cubic.Out)
+        .chain(altaTween);
+
+    var braccio2up = new TWEEN.Tween(braccio1.perno2.rotation)
+        .to({ x: -Math.PI/5, y: 0, z:0}, 1000)
+		.chain(saltaTween)
+		.delay(11500)
+		.start();
+
+	render();
+		
+	function createMesh(geom) {
+		var meshMaterial = new THREE.MeshLambertMaterial({color: 0xE52B50});
+		meshMaterial.side=THREE.DoubleSide;
+		var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
+		plane.children[0].castShadow=true;
+		return plane;
+	}
+
+	function render() {
+		trackballControls.update();
+		TWEEN.update();
+		KF.update();
+		app.position.x = controls.translationXlamp;
+		app.position.y = controls.translationYlamp;
+			
+		braccio1.rotation.z = controls.alpha;
+		braccio1.sphere.rotation.x = controls.beta;
+		braccio2.rotation.x = controls.gamma;
+		braccio1.perno2.rotation.z = controls.delta; 
+		lastsphere.rotation.x = controls.epsilon;
+	
+		// render using requestAnimationFrame
+		requestAnimationFrame(render);
+		renderer.render(scene, camera);
+	}
+		
+    });
+    </script>  
+ </body>
+</html>
