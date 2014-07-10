@@ -214,9 +214,6 @@
       var controls = new function () {
         this.showAxisHelper = true;
         this.pointerLock = false; 
-        this.luceDavanti = true;
-        this.luceSx = true;
-        this.luceDx = true;
         this.roof = false;
         this.night = false;
       };
@@ -227,9 +224,6 @@
       var gui = new dat.GUI(); 
       var axis_control = gui.add(controls, 'showAxisHelper');
       var pointerLock_control = gui.add(controls,'pointerLock');
-      var luceDavanti_control = gui.add(controls,'luceDavanti');
-      var luceSx_control = gui.add(controls,'luceSx');
-      var luceDx_control = gui.add(controls,'luceDx');
       var roof_control = gui.add(controls,'roof');
       var night_control = gui.add(controls, 'night');
 
@@ -256,33 +250,6 @@
         }
 
      });
-
-      luceDavanti_control.onChange(function(value){
-        if(!value){
-          spotLightAll2.intensity = 0;
-        }
-        else{
-          spotLightAll2.intensity = 1;
-        }
-      })
-
-      luceSx_control.onChange(function(value){
-        if(!value){
-          spotLightAll.intensity = 0;
-        }
-        else{
-          spotLightAll.intensity = 1;
-        }
-      })
-
-      luceDx_control.onChange(function(value){
-        if(!value){
-          spotLightAll3.intensity = 0;
-        }
-        else{
-          spotLightAll3.intensity = 1;
-        }
-      })
 
       roof_control.onChange(function(value){
         if(value){
@@ -338,33 +305,20 @@
           computeFPControls();
 
         TWEEN.update();
-/*
-        if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
-          videoImageContext.drawImage( video, 0, 0 );
-          if ( videoTexture ) 
-            videoTexture.needsUpdate = true;
-        }
-
-        if(window.location.parti)
-          movieScreen.visible = true;
-
-        if(window.location.fp){
-          var delta = clock.getDelta();
-          trackballControls.enabled = false;
-          webGLRenderer.clear();
-          camControls.update(delta);
-
-        }*/
-
 
         //in questo modo si sente solo nella stanza specifica
 
-        if ( camera.position.x >= 56 && camera.position.x<= 84 && camera.position.y>58 && camera.position.y<109 && camera.position.z>=0 && camera.position.z <= 25) {
+        if(!controls.pointerLock){
+          if ( camera.position.x >= 56 && camera.position.x<= 84 && camera.position.y>58 && camera.position.y<109 && camera.position.z>=0 && camera.position.z <= 25) {
+            videoC.volume = 1;
+
+          } else 
+            videoC.volume =0;
+
+        }
+        else{
           videoC.volume = 1;
-
-        } else 
-          videoC.volume =0;
-
+        }
 
         if ( videoC.readyState === video.HAVE_ENOUGH_DATA ) {
           videoCImageContext.drawImage( videoC, 0, 0 );

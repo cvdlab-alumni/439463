@@ -128,10 +128,12 @@ function makeWindows(scene){
       fin2_pier.rotation.x = 0.5*Math.PI;
       fin2_pier.position.set(2.66,0,4);
 
-      var pernoFinSx_pier = new THREE.Object3D();;
+      var pernoFinSx_pier = createMesh(new THREE.BoxGeometry(1,1,1),"prato.jpg");
       pernoFinSx_pier.add(fin2_pier);
       scene.add(pernoFinSx_pier);
       pernoFinSx_pier.position.set(65.3,109,10.5);
+
+      var pernoFinDx_bag = createMesh(new THREE.BoxGeometry(1,1,1),"prato.jpg");
 
 
       //salotto
