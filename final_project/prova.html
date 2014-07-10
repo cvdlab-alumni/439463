@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <title>Casa Giuliani</title> 
+  <style>
+    body{
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #stats {  /* Align stats top-left */
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+  </style> 
+  </head>
+  <body>
+  <!-- JavaScript libraries -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+  <script src="assets/libs/TrackballControls.js"></script>
+  <script src="assets/libs/OBJLoader.js"></script>
+  <script src="assets/libs/OBJMTLLoader.js"></script> 
+  <script src="assets/libs/MTLLoader.js"></script> 
+  <script src="assets/libs/tween.min.js"></script>
+  <script src="assets/libs/PointerLockControls.js"></script>
+
+  <!-- Javascript code that runs our Three.js examples --> 
+  <script>
+    // once everything is loaded, we run our Three.js stuff.
+    $(function () {
+
+      var stats = initStats();
+
+      // create a scene, that will hold all our elements such as objects, cameras and lights.
+      var scene = new THREE.Scene();
+
+      // create a camera, which defines where we're looking at.
+      var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+      // create trackball controls
+      var trackballControls = new THREE.TrackballControls(camera);
+
+      // create a render and set the size
+      var webGLRenderer = new THREE.WebGLRenderer();
+      webGLRenderer.setClearColor(new THREE.Color(0xeeeeee, 1.0));
+      webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+      projector = new THREE.Projector();
+      // position and point the camera to the center of the scene
+      camera.position.x = 0;
+      camera.position.y = -120;
+      camera.position.z = 50;
+      camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+
+      // add the output of the renderer to the html element
+      $('body').append(webGLRenderer.domElement);
+
+      // call the render function
+      var step = 0;
+
+      // setup the control gui
+      var controls = new function () {};
+      var gui = new dat.GUI();
+      var mesh;
+      var mesh2;
+      window.location.parti = false;
+
+      var loader = new THREE.OBJLoader();
+      loader.load('casaprova.obj', function (obj) {
+
+        global_o = obj;
+
+        var material = new THREE.MeshLambertMaterial({color: 0xaaaaaa});
+        material.side = THREE.DoubleSide;
+        obj.children[0].material = material;
+        mesh = obj.children[0];
+
+        var multiMaterial = [
+          new THREE.MeshLambertMaterial({color: 0xaaaaaa, side: THREE.DoubleSide, shading: THREE.FlatShading}),
+          new THREE.MeshLambertMaterial({wireframe: false, overdraw: true, color: 0xffffff, side: THREE.DoubleSide})
+          ];
+
+        mesh = THREE.SceneUtils.createMultiMaterialObject(obj.children[0].geometry, multiMaterial);  
+        scene.add(mesh);
+      });
+
+      var loader2 = new THREE.OBJLoader();
+      loader2.load('/cucina/lavandino2.obj', function (obj) {
+
+        global_o = obj;
+
+        var material = new THREE.MeshLambertMaterial({color: 0xaaaaaa});
+        material.side = THREE.DoubleSide;
+        obj.children[0].material = material;
+        mesh2 = obj.children[0];
+
+        var multiMaterial = [
+          new THREE.MeshLambertMaterial({color: 0xaaaaaa, side: THREE.DoubleSide, shading: THREE.FlatShading}),
+          new THREE.MeshLambertMaterial({wireframe: false, overdraw: true, color: 0xffffff, side: THREE.DoubleSide})
+          ];
+
+        mesh2 = THREE.SceneUtils.createMultiMaterialObject(obj.children[0].geometry, multiMaterial); 
+        mesh2.rotation.x = Math.PI/2; 
+        mesh2.rotation.y = Math.PI/2;
+        scene.add(mesh2);
+        mesh2.scale.set(10,10,10);
+        mesh2.position.set(212.5,-133,0.2);
+        
+      });
+
+      var loader3 = new THREE.OBJLoader();
+      loader3.load('/cucina/frigo.obj', function (obj) {
+
+        global_o = obj;
+
+        var material = new THREE.MeshLambertMaterial({color: 0xaaaaaa});
+        material.side = THREE.DoubleSide;
+        obj.children[0].material = material;
+        mesh3 = obj.children[0];
+
+        var multiMaterial = [
+          new THREE.MeshLambertMaterial({color: 0xaaaaaa, side: THREE.DoubleSide, shading: THREE.FlatShading}),
+          new THREE.MeshLambertMaterial({wireframe: false, overdraw: true, color: 0xffffff, side: THREE.DoubleSide})
+          ];
+
+        mesh3 = THREE.SceneUtils.createMultiMaterialObject(obj.children[0].geometry, multiMaterial);
+        scene.add(mesh3);
+        mesh3.rotation.x = Math.PI/2;
+        mesh3.scale.set(.005,.005,.005);
+        mesh3.position.set(5,28,0);
+        
+      });
+
+      var loaderprova = new THREE.OBJMTLLoader();
+      loaderprova.addEventListener('load', function (event) {
+
+        var object = event.content;
+
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        object.scale.set(10,10,10);
+        mesh = object;
+        scene.add(mesh);
+
+        object.rotation.x = Math.PI/2;
+        object.scale.set(7,7,7);
+        object.position.set(12,17,0);
+
+        var object2 = object.clone();
+        scene.add(object2);
+        object2.position.set(17,17,0);
+
+        var object3 = object.clone();
+        scene.add(object3);
+        object3.rotation.y =Math.PI;
+        object3.position.set(12,6,0);
+
+        var object4 = object.clone();
+        scene.add(object4);
+        object4.rotation.y =Math.PI;
+        object4.position.set(17,6,0);
+      });
+
+
+      loaderprova.load(
+        '/cucina/chair.obj', 
+        '/cucina/chair.mtl', 
+        {side: THREE.DoubleSide}
+      );
+
+      // DA RIAGGIUNGEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*
+      var loaderprova2 = new THREE.OBJMTLLoader();
+      loaderprova2.addEventListener('load', function (event) {
+
+        var object = event.content;
+
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        object.scale.set(0.05,0.05,0.05);
+        mesh = object;
+        mesh.rotation.x = Math.PI/2;
+        mesh.rotation.y = 4*Math.PI/6;
+        mesh.position.set(3.5,4,5.5);
+        scene.add(mesh);
+
+        mamma();
+      
+      });
+
+      function mamma(){
+        window.location.parti = true;
+      }
+
+      loaderprova2.load(
+        '/cucina/Flat-TV_01.obj',
+        {side: THREE.DoubleSide}
+      );
+
+*/
+      var loaderprova3 = new THREE.OBJMTLLoader();
+      loaderprova3.addEventListener('load', function (event) {
+
+        var object = event.content;
+
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        mesh = object;
+        mesh.scale.set(0.01,0.01,0.01);
+        mesh.rotation.z = -Math.PI/2;
+        mesh.position.set(2,87,4);
+
+        scene.add(mesh);
+      
+      });
+
+      loaderprova3.load(
+        '/camera-matrimoniale/Pillow_Obj.obj',
+        '/camera-matrimoniale/Pillow_Obj.mtl',
+        {side: THREE.DoubleSide}
+      );
+
+      var axisHelper = new THREE.AxisHelper(3);
+          scene.add(axisHelper);
+
+      var spotLightAll = new THREE.SpotLight(0xffffff);
+      spotLightAll.position.set(10, 120, 60);
+      spotLightAll.castShadow = true;
+      spotLightAll.intensity = 1;
+      spotLightAll.shadowCameraNear = 10;
+      spotLightAll.shadowCameraFar = 200;
+      scene.add(spotLightAll);
+      
+
+      //definizione del piano cui si trova la casa      
+      var plane = createMesh(new THREE.PlaneGeometry(200,200,200,200), "prato.jpg");
+      scene.add(plane);
+      plane.position.set(50,50,0); 
+           
+      scene.add(plane);
+
+      //***************************camera valentina**************************************
+      var letto = new THREE.Object3D();
+
+      var gamba1Geometry = new THREE.CylinderGeometry(0.5,0.5,2,4,4);
+      var gamba1=createMesh(gamba1Geometry,"wood-2.jpg");
+      gamba1.castShadow = true; 
+      letto.add(gamba1);
+      gamba1.rotation.x =0.5*Math.PI;
+      gamba1.rotation.y = 0.25*Math.PI;
+      gamba1.position.set(0.7,0.7,1);
+
+      var gamba2 = gamba1.clone();
+      letto.add(gamba2);
+      gamba2.position.set(15,0.7,1);
+
+      var gamba3 = gamba1.clone();
+      letto.add(gamba3);
+      gamba3.position.set(0.7,8,1);
+
+      var gamba4 = gamba1.clone();
+      letto.add(gamba4);
+      gamba4.position.set(15,8,1);
+
+      var letto_pier = letto.clone();
+
+      var materasso = createMeshRep(new THREE.BoxGeometry(15,1,8),"trapuntabis.jpg");
+      materasso.rotation.x = 0.5*Math.PI;
+      letto.add(materasso);
+      materasso.position.set(8,4.3,2);
+
+      scene.add(letto);
+      letto.position.set(1,50,0);
+
+      var cuscinoGeometry = new THREE.BoxGeometry(3,1,6);
+      var cuscinoMaterial = new THREE.MeshLambertMaterial({color: 0xFFFFF0});
+      var cuscino = new THREE.Mesh(cuscinoGeometry,cuscinoMaterial);
+      cuscino.rotation.x = 0.5*Math.PI;
+      letto.add(cuscino);
+      cuscino.position.set(2,4.3,3);
+      letto.castShadow = true;
+
+      //armadio 
+      var armadio = new THREE.Object3D();
+      var anta1 = createMesh(new THREE.BoxGeometry(14,18,1),"parquet.jpg");
+      anta1.rotation.x = 0.5*Math.PI;
+      scene.add(anta1);
+      anta1.position.set(10,31,9.1);
+
+      var anta2 = createMesh(new THREE.BoxGeometry(5,18,1),"parquet.jpg");
+      anta2.rotation.x = 0.5*Math.PI;
+      anta2.rotation.y = 0.5*Math.PI;
+      scene.add(anta2);
+      anta2.position.set(16.5,33.5,9.1)
+
+      var anta3 = anta2.clone();
+      armadio.add(anta3);
+      anta3.position.set(3.5,33.5,9.1);
+
+      var anta4 = createMesh(new THREE.BoxGeometry(14,5,1),"parquet.jpg");
+      scene.add(anta4);
+      anta4.position.set(10,33.5,0.5);
+      
+      var anta5 = anta4.clone();
+      scene.add(anta5);
+      anta5.position.set(10,33.5,17.6);
+
+      var anta6 = createMesh(new THREE.BoxGeometry(7,18,1),"parquet.jpg");
+      anta6.rotation.x = 0.5 * Math.PI;
+      anta6.position.set(3.5,0,9);
+      var perno = new THREE.Object3D();
+      scene.add(perno);
+      perno.position.set(3,36,0);
+      perno.add(anta6);
+
+      var anta7 = createMesh(new THREE.BoxGeometry(7,18,1),"parquet.jpg");
+      anta7.rotation.x = 0.5 *Math.PI;
+      anta7.position.set(-3.5,0,9);
+      var perno2 = new THREE.Object3D();
+      scene.add(perno2);
+      perno2.position.set(17,36,0);
+      perno2.add(anta7);
+      armadio.castShadow = true;
+
+      scene.add(armadio);
+
+      //finestre
+      var fin = createMesh(new THREE.BoxGeometry(5.32,8.87,0.3),"bordo.jpg");
+      var plane = createMesh(new THREE.BoxGeometry(5.32,8.87,0.2),"finestra1vetro.jpg");
+      var plane2 = createMesh(new THREE.BoxGeometry(5.32,8.87,0.2),"finestra1vetro.jpg");
+      fin.add(plane);
+      fin.add(plane2);
+      plane.position.set(0,0,-0.16);
+      plane2.position.set(0,0,0.16);
+      var fin_cuc = fin.clone();
+      var fin_matr = fin.clone();
+      var fin_bag = fin.clone();
+      fin.rotation.x = 0.5*Math.PI;
+      fin.rotation.y = 0.5*Math.PI;
+      fin.position.set(0.1,-2.65,4.13);
+      //scene.add(fin);
+
+      var pernoFinDx = new THREE.Object3D();
+      pernoFinDx.add(fin);
+      scene.add(pernoFinDx);
+      pernoFinDx.position.set(0,51.55,10.5);
+
+
+      var fin2 = createMesh(new THREE.BoxGeometry(5.32,8.87,0.3),"bordo.jpg");
+      var plane3 = createMesh(new THREE.BoxGeometry(5.32,8.87,0.2),"finestra2vetro.jpg");
+      var plane4 = createMesh(new THREE.BoxGeometry(5.32,8.87,0.2),"finestra2vetro.jpg");
+      fin2.add(plane3);
+      fin2.add(plane4);
+      plane3.position.set(0,0,-0.16);
+      plane4.position.set(0,0,0.16);
+      var fin2_cuc = fin2.clone();
+      var fin2_matr = fin2.clone();
+      var fin2_bag = fin2.clone();
+      fin2.rotation.x = 0.5*Math.PI;
+      fin2.rotation.y = 0.5*Math.PI;
+      fin2.position.set(0.1,2.65,4.13);
+      //scene.add(fin2);
+
+      var pernoFinSx = new THREE.Object3D();
+      pernoFinSx.add(fin2);
+      scene.add(pernoFinSx);
+      pernoFinSx.position.set(0.1,39.68,10.5);
+
+      //carta da parati
+      var carta = createMesh(new THREE.BoxGeometry(30.35,20.1,0.2),"carta_parati_vale.jpg");
+      carta.rotation.x = 0.5 * Math.PI;
+      carta.position.set(15.2,60.55,10.2);
+      scene.add(carta);
+
+      var carta2 = carta.clone();
+      carta2.position.set(15.2,30.7,10.2);
+      scene.add(carta2);
+
+      //shape sulla porta
+      var shape = new THREE.Shape();
+      shape.moveTo(0,0);
+      shape.lineTo(0.303,0);
+      shape.lineTo(0.303,0.202);
+      shape.lineTo(0,0.202);
+      shape.lineTo(0,0);
+
+      var hole = new THREE.Path();
+      hole.moveTo(0.113,0);
+      hole.lineTo(0.193,0);
+      hole.lineTo(0.193,0.14);
+      hole.lineTo(0.113,0.14);
+      hole.lineTo(0.113,0);
+      shape.holes.push(hole);
+      var options = {amount: 0.001,bevelThickness: 2,bevelSize: 1,bevelSegments: 3,bevelEnabled: false,curveSegments: 12,steps: 1};
+      var shape2 = createMeshRep(new THREE.ExtrudeGeometry(shape,options),"carta_parati_vale.jpg");
+      shape2.rotation.x = 0.5*Math.PI;
+      shape2.rotation.y = 0.5*Math.PI;
+      shape2.position.set(30.2,30.3,0);
+      shape2.scale.set(100,100,100);
+      scene.add(shape2);
+
+      //shape sulla finestra
+      var shapeFin = new THREE.Shape();
+      shapeFin.moveTo(0,0);
+      shapeFin.lineTo(0.303,0);
+      shapeFin.lineTo(0.303,0.202);
+      shapeFin.lineTo(0,0.202);
+      shapeFin.lineTo(0,0);
+
+      var hole = new THREE.Path();
+      hole.moveTo(0.093,0.102);
+      hole.lineTo(0.146,0.102);
+      hole.lineTo(0.146,0.19);
+      hole.lineTo(0.093,0.19);
+      hole.lineTo(0.093,0.102);
+      shapeFin.holes.push(hole);
+
+      var hole2 = new THREE.Path();
+      hole2.moveTo(0.159,0.102);
+      hole2.lineTo(0.212,0.102);
+      hole2.lineTo(0.212,0.19);
+      hole2.lineTo(0.159,0.19);
+      hole2.lineTo(0.159,0.102);
+      shapeFin.holes.push(hole2);
+
+      var shapeFin2 = createMeshRep(new THREE.ExtrudeGeometry(shapeFin,options),"carta_parati_vale.jpg");
+      shapeFin2.rotation.x = 0.5*Math.PI;
+      shapeFin2.rotation.y = 0.5*Math.PI;
+      shapeFin2.position.set(0.35,30.3,0);
+      shapeFin2.scale.set(100,100,100);
+      scene.add(shapeFin2);
+
+      //pavimento 
+      var pavimento = createMeshRep(new THREE.BoxGeometry(30.3,30.3,0.1),"parquet2.jpg");
+      pavimento.receiveShadow = true;
+      pavimento.position.set(15.3,45.6,0.25);
+      scene.add(pavimento);
+
+      //tappeto
+      var tappeto = createMesh(new THREE.BoxGeometry(20,20,0.1),"tappeto.jpg");
+      tappeto.position.set(15,45,0.3);
+      //tappeto.castShadow = true;
+      tappeto.receiveShadow = true;
+      scene.add(tappeto);
+
+      //lampadario
+      var filoGeometry = new THREE.CylinderGeometry(0.1,0.1,2,8,8,false);
+      var filoMaterial = new THREE.MeshLambertMaterial({color: 0xC0C0C0});
+      var filo = new THREE.Mesh(filoGeometry,filoMaterial);
+      filo.castShadow = true;
+      filo.rotation.x = Math.PI/2;
+      filo.position.set(15,45,22);
+      scene.add(filo);
+
+      var semisphereGeometry = new THREE.SphereGeometry(2,32,32,Math.PI,Math.PI,0,-Math.PI);
+      var semisphereMaterial =  new THREE.MeshLambertMaterial({color: 0xC0C0C0  });
+      semisphereMaterial.side = THREE.DoubleSide;     
+      var semisphere = new THREE.Mesh(semisphereGeometry,semisphereMaterial);
+      semisphere.castShadow = true;
+      semisphere.position.set(15,45,20);
+      scene.add(semisphere);
+    
+
+      var luceVale = new THREE.PointLight(0xffffff);
+      luceVale.position.set(0,0,1);
+      luceValeintensity = 1;
+      luceVale.castShadow = true;
+      luceVale.shadowCameraNear = 10;
+      luceVale.shadowCameraFar = 30;
+      var target = new THREE.Object3D();
+      target.position.set(4,45,1);
+      luceVale.target = target;
+      semisphere.add(luceVale);
+
+      //porta
+      var door  = createMesh(new THREE.BoxGeometry(8,0.2,14),"door.jpg");
+      //scene.add(door);
+      door.rotation.z = Math.PI/2;
+      door.position.set(0,4,7);
+
+      var pernoporta = new THREE.Object3D();
+      pernoporta.add(door);
+      pernoporta.position.set(30.5,41.6,0);
+      scene.add(pernoporta);
+
+      //comodino 
+      var comodino = createMesh(new THREE.BoxGeometry(5,5,5),"comodino2.jpg");
+      comodino.rotation.z = Math.PI/2;
+      comodino.position.set(3,46,3);
+      scene.add(comodino);
+      
+      var com_dav = createMesh(new THREE.BoxGeometry(5,0.2,5),"comodino.jpg");
+      comodino.add(com_dav);
+      com_dav.position.set(0,-2.51,0);
+
+      //lampadina sul comodino
+
+      var baseGeometry = new THREE.CylinderGeometry(4.5,5,1,32);
+      var baseMaterial =  new THREE.MeshLambertMaterial({color: 0x666666}); 
+      var base = new THREE.Mesh(baseGeometry,baseMaterial);
+      base.castShadow = true;
+      scene.add(base);
+      base.rotation.x = 0.5*Math.PI;
+      base.position.set(0,0,0.5);
+
+      function bracci(r, h) {
+        var perno = new THREE.Object3D();
+          
+        var sphereGeometry = new THREE.SphereGeometry(r,8,8);
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x404040});
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.castShadow = true;
+        sphere.position.set(0,0,0);
+
+        var cylinderGeometry = new THREE.CylinderGeometry(r,r,h,8,8,false);
+        var cylinderMaterial = new THREE.MeshLambertMaterial({color: 0x2F2F2F});
+        var cylinder = new THREE.Mesh(cylinderGeometry,cylinderMaterial);
+        cylinder.castShadow = true;
+        cylinder.position.set(0,0,h/2+r);
+        cylinder.rotation.x = Math.PI/2;
+          
+
+        var perno2 = new THREE.Object3D();
+        perno2.position.set(0,h/2+r,0);
+        perno2.rotation.x = -Math.PI/2;
+          
+
+        perno.add(sphere);
+        sphere.add(cylinder);
+        cylinder.add(perno2);
+
+        perno.sphere = sphere;
+        perno.cylinder = cylinder;
+        perno.perno2 = perno2;
+
+        return perno;
+      }
+
+      var braccio1 = bracci(1,10);
+      braccio1.position.set(0,0,2)
+      //scene.add(braccio1);
+      var braccio2 = bracci(1,10);
+      braccio1.perno2.add(braccio2);
+      
+      var lamp = new THREE.Object3D();
+      lamp.add(base);
+      lamp.add(braccio1);
+      scene.add(lamp);
+      
+      var app =new THREE.Object3D();
+      app.add(lamp);
+      scene.add(app);
+
+      //ultima sfera prima della lampada
+      var lastsphereGeometry = new THREE.SphereGeometry(1,8,8);
+      var lastsphereMaterial =  new THREE.MeshLambertMaterial({color: 0x404040}); 
+      var lastsphere = new THREE.Mesh(lastsphereGeometry,lastsphereMaterial);
+      lastsphere.castShadow = true;
+      braccio2.perno2.add(lastsphere);
+    
+      //semicirconferenza
+      var semisphereGeometry = new THREE.SphereGeometry(5,32,32,Math.PI,Math.PI,0,-Math.PI);
+      var semisphereMaterial =  new THREE.MeshLambertMaterial({color: 0x8F8F8F});
+      semisphereMaterial.side = THREE.DoubleSide;     
+      var semisphere = new THREE.Mesh(semisphereGeometry,semisphereMaterial);
+      semisphere.castShadow = true;
+      semisphere.rotation.x = Math.PI;
+      semisphere.position.set(0,0,6);
+      lastsphere.add(semisphere);
+      
+      var lampadina1Geometry = new THREE.SphereGeometry(1.5,32,32);
+      var lampadina1Material =  new THREE.MeshLambertMaterial({color: 0xffff00}); 
+      lampadina1Material.opacity = 0.3;
+      var lampadina1 = new THREE.Mesh(lampadina1Geometry,lampadina1Material);
+      lampadina1.castShadow = true;
+      lampadina1.position.set(0,0,2.5);
+      lastsphere.add(lampadina1);
+
+      // aggiugno una spot light che parte dalla lampadina
+      var luceValeLampadina = new THREE.SpotLight(0xffffff);
+      luceValeLampadina.shadowMapWidth = 2048; 
+      luceValeLampadina.intensity = 5;
+      luceValeLampadina.position.set(0,0,0);
+      luceValeLampadina.castShadow = true;
+      var target = new THREE.Object3D();
+      target.position.set(0,0,1);
+      luceValeLampadina.target = target;
+      lampadina1.add(luceValeLampadina);
+      lampadina1.add(target);
+      luceValeLampadina.shadowCameraNear = 10;
+      
+      var luceValeLampadina2 = new THREE.PointLight(0xffffff,5,6);
+      luceValeLampadina2.target = lampadina1;
+      luceValeLampadina2.castShadow = true;
+      luceValeLampadina2.position.set(0,0,4.5);
+      //lampadina1.add(luceValeLampadina2);
+
+      lamp.scale.set(.2,.2,.2);
+      lamp.position.set(3,46,6);
+
+      //quadro
+      var quadro = createMesh(new THREE.PlaneGeometry(10,10),"cornice3.jpg");
+      scene.add(quadro);
+      quadro.rotation.x = Math.PI/2;
+      quadro.position.set(15,60.5,15);
+
+
+
+      //********************************************************CUCINA*******************************************
+      
+      //tutte le carte da parati
+      var pav_cuc = createMeshRep2(new THREE.BoxGeometry(30.3,30.3,0.1),"piastrelle4.jpg",12);
+      scene.add(pav_cuc);
+      pav_cuc.position.set(15.15,15.15,0.3);
+
+      var carta_cuc1 = createMeshRep2(new THREE.BoxGeometry(30.35,20.1,0.2),"piastrelle3.jpg",6);
+      scene.add(carta_cuc1);
+      carta_cuc1.rotation.x = Math.PI/2;
+      carta_cuc1.position.set(15.2,30.2,10.05);
+
+      var carta_cuc2 = createMeshRep2(new THREE.BoxGeometry(30.3,20.1,0.2),"piastrelle3.jpg",6);
+      scene.add(carta_cuc2);
+      carta_cuc2.rotation.x = Math.PI/2;
+      carta_cuc2.rotation.y = Math.PI/2;
+      carta_cuc2.position.set(0.35,15.16,10);
+
+      var shapeFin_cuc = createMeshRep2(new THREE.ExtrudeGeometry(shapeFin,options),"piastrelle3.jpg",20);
+      scene.add(shapeFin_cuc);
+      shapeFin_cuc.rotation.x = Math.PI/2;
+      shapeFin_cuc.position.set(0,0.5,0);
+      shapeFin_cuc.scale.set(100,100,100);
+
+      var shapePorta_fin = createMeshRep2(new THREE.ExtrudeGeometry(shape,options),"piastrelle3.jpg",20);
+      shapePorta_fin.rotation.x = 0.5*Math.PI;
+      shapePorta_fin.rotation.y = 0.5*Math.PI;
+      shapePorta_fin.position.set(30.2,0.16,0);
+      shapePorta_fin.scale.set(100,100,100);
+      scene.add(shapePorta_fin);
+
+      //mobili e fornelli
+      var mob = createMesh(new THREE.BoxGeometry(6,6,7),"mobilecucina.jpg");
+      scene.add(mob);
+      mob.position.set(12,27.5,3.8);
+      
+      var fornello = createMesh(new THREE.PlaneGeometry(5,5),"fornelli2.jpg");
+      mob.add(fornello);
+      fornello.position.set(0,-0.4,3.6);
+
+      var sportello = createMesh(new THREE.PlaneGeometry(5,7),"furniture.jpg");
+      sportello.rotation.x = Math.PI/2;
+      mob.add(sportello);
+      sportello.position.set(0,-3.05,0);
+
+
+      //mobile lavandino
+      var mob_lav = createMesh(new THREE.BoxGeometry(10,6,7),"mobilecucina.jpg");
+      scene.add(mob_lav);
+      mob_lav.position.set(22,27.5,3.8);
+
+      var sportello2 = createMesh(new THREE.PlaneGeometry(5,7),"furniture.jpg");
+      sportello2.rotation.x = Math.PI/2;
+      mob_lav.add(sportello2);
+      sportello2.position.set(0,-3.05,0);
+
+
+      // tavolino
+      var g1 = createMesh(new THREE.CylinderGeometry(0.5,0.5,6,8,8),"wood-2.jpg");
+      scene.add(g1);
+      g1.rotation.x = Math.PI/2;
+      g1.position.set(9,9,3.3);
+
+      var g2 = g1.clone();
+      scene.add(g2);
+      g2.position.set(19,9,3.3);
+
+      var g3 = g1.clone();
+      scene.add(g3);
+      g3.position.set(19,16,3.3);
+
+      var g4 = g1.clone();
+      scene.add(g4);
+      g4.position.set(9,16,3.3);
+
+      var tav = createMesh(new THREE.BoxGeometry(12,9,1),"wood-2.jpg");
+      scene.add(tav);
+      //tav.rotation.z = Math.PI/2;
+      tav.position.set(14,12.5,6.3);
+
+      var quadro_cuc = createMesh(new THREE.PlaneGeometry(13,5),"cornice4.jpg");
+      scene.add(quadro_cuc);
+      quadro_cuc.rotation.x = Math.PI/2;
+      quadro_cuc.position.set(17,29,14);
+
+      //mobiletto tv
+      var mobiletto = createMesh(new THREE.BoxGeometry(5,6,5),"mobilecucina.jpg");
+      scene.add(mobiletto);
+      mobiletto.position.set(3,3.4,3);
+
+      // create the video element
+      video = document.createElement( 'video' );
+      // video.id = 'video';
+      // video.type = ' video/ogg; codecs="theora, vorbis" ';
+      video.src = "assets/textures/Unti e Bisunti - promo.avi";
+      video.load(); // must call after setting/changing source
+      video.play();
+  
+      videoImage = document.createElement( 'canvas' );
+      //videoImage.width = 480;
+      //videoImage.height = 204;
+
+      videoImage.width = 1000;
+      videoImage.height = 500;
+
+      videoImageContext = videoImage.getContext( '2d' );
+      // background color if no video present
+      videoImageContext.fillStyle = '#000000';
+      videoImageContext.fillRect( 0, 0, videoImage.width, videoImage.height );
+
+      videoTexture = new THREE.Texture( videoImage );
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+  
+      var movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, overdraw: true, side:THREE.DoubleSide } );
+      // the geometry on which the movie will be displayed;
+      //    movie image will be scaled to fit these dimensions.
+      var movieGeometry = new THREE.PlaneGeometry( 6.4, 3.5, 4, 4 );
+      var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
+      movieScreen.rotation.x = Math.PI/2;
+      movieScreen.rotation.y = 2*Math.PI/3;
+      //movieScreen.position.set(3.8,4.4,9); //il primo avvicina lo schermo alla tv
+      movieScreen.position.set(3.45,4.17,8.9);
+      scene.add(movieScreen);
+      movieScreen.visible = false;
+      
+      video.pause();
+
+
+      //finestra cucina dx
+      fin_cuc.rotation.x = 0.5*Math.PI;
+      fin_cuc.position.set(-2.5,0.4,0);
+
+      var pernoFinDx_cuc = new THREE.Object3D();
+      pernoFinDx_cuc.add(fin_cuc);
+      scene.add(pernoFinDx_cuc);
+      pernoFinDx_cuc.position.set(21,-0.15,14.8);
+
+      fin2_cuc.rotation.x = 0.5*Math.PI;
+      fin2_cuc.position.set(2.5,0.4,0);
+
+      var pernoFinSx_cuc = new THREE.Object3D();
+      pernoFinSx_cuc.add(fin2_cuc);
+      scene.add(pernoFinSx_cuc);
+      pernoFinSx_cuc.position.set(9.5,-0.15,14.8);
+
+      
+      //porta cucina
+      var door_cuc  = createMesh(new THREE.BoxGeometry(8,0.2,14),"door.jpg");
+      //scene.add(door);
+      door_cuc.rotation.z = Math.PI/2;
+      door_cuc.position.set(0,4,7);
+
+      var pernoporta_cuc = new THREE.Object3D();
+      pernoporta_cuc.add(door_cuc);
+      pernoporta_cuc.position.set(30.5,11.3,0);
+      scene.add(pernoporta_cuc);
+
+      var luceCucina = new THREE.SpotLight(0xffffff);
+      luceCucina.position.set(25, -200, 10);
+      luceCucina.castShadow = true;
+      luceCucina.intensity = 1;
+      luceCucina.shadowCameraNear = 10;
+      luceCucina.shadowCameraFar = 200;
+      luceCucina.target = tav;
+      scene.add(luceCucina);
+
+      // =============> CAMERA PAOLO-ANTONIETTA <================================
+
+      var planeMatr = createMeshRep(new THREE.BoxGeometry(30.3,55,0.1),"parquet2.jpg");
+      scene.add(planeMatr);
+      planeMatr.position.set(15.2,82,0.2);
+
+      var carta_matr = createMesh(new THREE.PlaneGeometry(30.3,20.1,0),"cartamatr.jpg");
+      scene.add(carta_matr);
+      carta_matr.rotation.x = Math.PI/2;
+      carta_matr.position.set(15.2,60.91,10.05);
+
+      var carta_matr2 = createMesh(new THREE.PlaneGeometry(48.5,20.1,0),"cartamatr.jpg");
+      scene.add(carta_matr2);
+      carta_matr2.rotation.x = Math.PI/2;
+      carta_matr2.rotation.y = Math.PI/2;
+      carta_matr2.position.set(0.4,85,10.05);
+
+      //TO DO : SHAPE SULLA FINESTRA E SULLA PORTA
+      var shapeFin_matr = createMeshRep2(new THREE.ShapeGeometry(shapeFin),"cartamatr.jpg",2);
+      scene.add(shapeFin_matr);
+      shapeFin_matr.rotation.x = Math.PI/2;
+      shapeFin_matr.position.set(0,108.862,0);
+      shapeFin_matr.scale.set(100,100,100);
+
+      //shape sulla porta
+      var shapePorta = new THREE.Shape();
+      shapePorta.moveTo(0,0);
+      shapePorta.lineTo(0.483,0);
+      shapePorta.lineTo(0.483,0.202);
+      shapePorta.lineTo(0,0.202);
+      shapePorta.lineTo(0,0);
+
+      var holep = new THREE.Path();
+      holep.moveTo(0.083,0);
+      holep.lineTo(0.143,0);
+      holep.lineTo(0.143,0.14);
+      holep.lineTo(0.083,0.14);
+      holep.lineTo(0.083,0);
+      shapePorta.holes.push(holep);
+
+
+      var shapePorta_matr = createMeshRep2(new THREE.ShapeGeometry(shapePorta),"cartamatr.jpg",2);
+      shapePorta_matr.rotation.x = 0.5*Math.PI;
+      shapePorta_matr.rotation.y = 0.5*Math.PI;
+      shapePorta_matr.position.set(30.19,60.5,0);
+      shapePorta_matr.scale.set(100,100,100);
+      scene.add(shapePorta_matr);
+
+      //letto matr
+      var letto_matr = new THREE.Object3D();
+
+      var gamba1matrGeometry = new THREE.CylinderGeometry(0.5,0.5,2,4,4);
+      var gamba1matr=createMesh(gamba1matrGeometry,"wood-2.jpg");
+      gamba1matr.castShadow = true; 
+      //letto.add(gamba1matr);
+      scene.add(gamba1matr);
+      gamba1matr.rotation.x =0.5*Math.PI;
+      gamba1matr.rotation.y = 0.25*Math.PI;
+      gamba1matr.position.set(2,80,1);
+
+      var gamba2matr = gamba1matr.clone();
+      //letto_matr.add(gamba2matr);
+      scene.add(gamba2matr);
+      gamba2matr.position.set(16,80,1);
+
+      var gamba3matr = gamba1matr.clone();
+      //letto_matr.add(gamba3matr);
+      gamba3matr.position.set(16,94,1);
+      scene.add(gamba3matr);
+
+      var gamba4matr = gamba1matr.clone();
+      //letto_matr.add(gamba4matr);
+      gamba4matr.position.set(15,8,1);
+
+      var materassomatr = createMeshRep(new THREE.BoxGeometry(15,1,15),"coprilettomatr.jpg");
+      materassomatr.rotation.x = 0.5*Math.PI;
+      //letto.add(materassomatr);
+      scene.add(materassomatr);
+      materassomatr.position.set(8.9,87,2.5);
+
+      scene.add(letto_matr);
+      letto_matr.position.set(1,100,0);
+
+      //finestra camera matrimoniale
+      fin_matr.rotation.x = 0.5*Math.PI;
+      fin_matr.position.set(-2.5,0.4,0);
+
+      var pernoFinDx_matr = new THREE.Object3D();
+      pernoFinDx_matr.add(fin_matr);
+      scene.add(pernoFinDx_matr);
+      pernoFinDx_matr.position.set(21,108.8,14.8);
+
+      fin2_matr.rotation.x = 0.5*Math.PI;
+      fin2_matr.position.set(2.5,0.4,0);
+
+      var pernoFinSx_matr = new THREE.Object3D();
+      pernoFinSx_matr.add(fin2_matr);
+      scene.add(pernoFinSx_matr);
+      pernoFinSx_matr.position.set(9.5,108.8,14.8);
+
+      //porta camera matrimoniale
+      var door_matr  = createMesh(new THREE.BoxGeometry(6,0.2,14),"door.jpg");
+      door_matr.rotation.z = Math.PI/2;
+      door_matr.position.set(-0.5,3.5,7);
+
+      var pernoporta_matr = new THREE.Object3D();
+      pernoporta_matr.add(door_matr);
+      pernoporta_matr.position.set(30.5,68.8,0);
+      scene.add(pernoporta_matr);
+
+      //tappeto camera matrimoniale
+      var tappeto_matr = createMesh(new THREE.BoxGeometry(25,21,0.1),"tappeto2.jpg");
+      scene.add(tappeto_matr);
+      tappeto_matr.position.set(15,85,0.3);
+
+      //comodino 
+      var comodino_matr = comodino.clone();
+      scene.add(comodino_matr);
+      comodino_matr.position.set(4.6,76.8,2.6);
+
+      var comodino_matr2 = comodino.clone();
+      scene.add(comodino_matr2);
+      comodino_matr2.position.set(4.6,97.2,2.6);
+
+      var quadro_matr = createMesh(new THREE.PlaneGeometry(20,10),"frame5.jpg");
+      scene.add(quadro_matr);
+      quadro_matr.rotation.x = Math.PI/2;
+      quadro_matr.rotation.y = Math.PI/2;
+      quadro_matr.position.set(1,87,13);
+
+
+
+      // =============> BAGNO <=================
+
+      var pav_bagno = createMeshRep2(new THREE.BoxGeometry(26.3,26.2,0.1),"piastrelle_bagno.jpg",10);
+      pav_bagno.receiveShadow = true;
+      pav_bagno.position.set(43.8,96,0.2);
+      scene.add(pav_bagno);
+
+      var luceBagno = new THREE.SpotLight(0xffffff);
+      luceBagno.position.set(96, 150, 60);
+      luceBagno.castShadow = true;
+      luceBagno.intensity = 1;
+      luceBagno.shadowCameraNear = 10;
+      luceBagno.shadowCameraFar = 200;
+      luceBagno.target = pav_bagno;
+      scene.add(luceBagno);
+
+      var carta_bag = createMeshRep2(new THREE.BoxGeometry(26.3,20.2,0.2),"bagno.jpg",5);
+      carta_bag.rotation.x = Math.PI/2;
+      carta_bag.rotation.y = Math.PI/2;
+      carta_bag.position.set(30.7,96.1,10.1);
+      scene.add(carta_bag);
+
+      var carta_bag2 = carta_bag.clone();
+      scene.add(carta_bag2);
+      carta_bag2.position.set(56.55,96.1,10.1);
+
+      var door_bag  = createMesh(new THREE.BoxGeometry(8.7,0.2,14),"door.jpg");
+      //scene.add(door);
+      //door_bag.rotation.z = Math.PI/2;
+      door_bag.position.set(0,4,7);
+
+      var pernoporta_bag = new THREE.Object3D();
+      pernoporta_bag.add(door_bag);
+      pernoporta_bag.position.set(43.6,79,0.2);
+      scene.add(pernoporta_bag);
+
+      var shapeFin_bag = createMeshRep2(new THREE.ExtrudeGeometry(shapeFin,options),"bagno.jpg",15);
+      scene.add(shapeFin_bag);
+      shapeFin_bag.rotation.x = Math.PI/2;
+      shapeFin_bag.position.set(30.6,109.3,0);
+      shapeFin_bag.scale.set(86,100,200);
+
+      var shapePorta_bag = createMeshRep2(new THREE.ExtrudeGeometry(shape,options),"bagno.jpg",20);
+      shapePorta_bag.rotation.x = 0.5*Math.PI;
+      shapePorta_bag.position.set(30.6,83.3,0);
+      shapePorta_bag.scale.set(86,100,100);
+      scene.add(shapePorta_bag);
+
+      //carico il lavandino
+      var loaderbagno = new THREE.OBJMTLLoader();
+      loaderbagno.addEventListener('load', function (event) {
+
+        var object = event.content;
+
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        mesh = object;
+        mesh.scale.set(0.02,0.02,0.02);
+        mesh.rotation.x = Math.PI/2;
+        mesh.rotation.y = Math.PI/2;
+        mesh.position.set(34.3,103,6);
+
+        scene.add(mesh);
+      
+      });
+
+      loaderbagno.load(
+        '/bagno/lavandinobagno.obj',
+        {side: THREE.DoubleSide}
+      );
+
+      //carico la vasca
+      var loaderbagno2 = new THREE.OBJMTLLoader();
+      loaderbagno2.addEventListener('load', function (event) {
+
+        var object = event.content;
+        console.log(object);
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        mesh = object;
+        mesh.scale.set(0.04,0.04,0.04);
+        mesh.rotation.x = Math.PI/2;
+        mesh.rotation.y = Math.PI/2;
+        mesh.position.set(52,96,1);
+
+        scene.add(mesh);
+      
+      });
+
+      loaderbagno2.load(
+        '/bagno/vasca.obj',
+        {side: THREE.DoubleSide}
+      );
+
+      //carico il water
+      var loaderbagno3 = new THREE.OBJMTLLoader();
+      loaderbagno3.addEventListener('load', function (event) {
+
+        var object = event.content;
+        console.log(object);
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        mesh = object;
+        mesh.scale.set(0.4,0.4,0.4);
+        mesh.rotation.x = Math.PI/2;
+        mesh.rotation.y = Math.PI/2;
+        mesh.position.set(34,96,1);
+
+        scene.add(mesh);
+      
+      });
+
+      loaderbagno3.load(
+        '/bagno/water.obj',
+        {side: THREE.DoubleSide}
+      );
+
+      //carpet
+      var carpet = createMesh(new THREE.BoxGeometry(12,12,0.2),"carpet.jpg");
+      carpet.position.set(45,97,0.35);
+      //tappeto.castShadow = true;
+      carpet.receiveShadow = true;
+      scene.add(carpet);
+
+      //finestre bagno
+      fin_bag.rotation.x = 0.5*Math.PI;
+      fin_bag.position.set(-2.5,0.4,0);
+      fin_bag.scale.set(0.865,1,1);
+
+      var pernoFinDx_bag = new THREE.Object3D();
+      pernoFinDx_bag.add(fin_bag);
+      scene.add(pernoFinDx_bag);
+      pernoFinDx_bag.position.set(49.1,108.8,14.7);
+
+      fin2_bag.scale.set(0.87,1,1);
+      fin2_bag.rotation.x = 0.5*Math.PI;
+      fin2_bag.position.set(2.5,0.4,0);
+
+      var pernoFinSx_bag = new THREE.Object3D();
+      pernoFinSx_bag.add(fin2_bag);
+      scene.add(pernoFinSx_bag);
+      pernoFinSx_bag.position.set(38.26,108.8,14.7);
+
+      var cubeGeom = new THREE.CubeGeometry(1, 5, 5, 1, 1, 1);
+      mirrorCubeCamera = new THREE.CubeCamera( 0.1, 5000, 512 );
+      // mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
+      scene.add( mirrorCubeCamera );
+      var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
+      mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
+      mirrorCube.position.set(31,102,15);
+      mirrorCubeCamera.position = mirrorCube.position;
+      scene.add(mirrorCube);
+
+      // ===============> CAMERA PIERPAOLO <========================
+
+      //prima parte pavimento bagno
+      var planePier = createMeshRep2(new THREE.BoxGeometry(28.3,27,0.2),"parquet2.jpg",4);
+      scene.add(planePier);
+      planePier.position.set(70.8,95.5,0.25);
+
+      //pavimento bagno+sala+ingresso
+      var planeTot = createMeshRep2(new THREE.BoxGeometry(54.6,83,0.2),"parquet2.jpg",8);
+      scene.add(planeTot);
+      planeTot.position.set(57.7,41.8,0.25);
+
+      //letto pier
+      scene.add(letto_pier);
+      letto_pier.position.set(68,80,0);
+
+      var materasso_pier = createMeshRep(new THREE.BoxGeometry(15,1,8),"copertapier.jpg");
+      materasso_pier.rotation.x = 0.5*Math.PI;
+      scene.add(materasso_pier);
+      materasso_pier.position.set(75.7,84.1,3);
+
+      //comodino pier 
+      var comodino_pier = comodino.clone();
+      scene.add(comodino_pier);
+      comodino_pier.rotation.z= 3*Math.PI/2;
+      comodino_pier.position.set(80,76.8,2.6);
+
+      scene.rotation.x = Math.PI/2;
+
+      //carico la vasca
+      var loaderpier = new THREE.OBJMTLLoader();
+      loaderpier.addEventListener('load', function (event) {
+
+        var object = event.content;
+        console.log(object);
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        mesh = object;
+        mesh.scale.set(0.1,0.1,0.1);
+        mesh.rotation.x = Math.PI/2;
+        mesh.position.set(75,105,4);
+
+        scene.add(mesh);
+      
+      });
+
+      loaderpier.load(
+        '/scrivania-pier/bureau3.obj',
+        '/scrivania-pier/bureau3.mtl',
+        {side: THREE.DoubleSide}
+      );
+
+      //carico la vasca
+      var loaderpier2 = new THREE.OBJMTLLoader();
+      loaderpier2.addEventListener('load', function (event) {
+
+        var object = event.content;
+        console.log(object);
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        mesh = object;
+        mesh.scale.set(0.1,0.1,0.1);
+        mesh.rotation.x = Math.PI/2;
+        mesh.rotation.y = 3*Math.PI/2;
+        mesh.position.set(95,135,12);
+
+        scene.add(mesh);
+      
+      });
+
+      loaderpier2.load(
+        '/chair-pier/officeChair.obj',
+        '/chair-pier/officeChair.mtl',
+        {side: THREE.DoubleSide}
+      );
+
+      // ********************************************************************************************************
+      var axisHelper = new THREE.AxisHelper(3);
+      scene.add(axisHelper);
+
+      var controls = new function () {
+        this.showAxisHelper = true;
+        this.apriAntaDx = 0.00;
+        this.apriAntaSx = 0.00;
+        this.apriFinestraStanzaValeDx = 0.00;
+        this.apriFinestraStanzaValeSx = 0.00;
+        this.lampOn = true;
+        this.apriPortaVal = 0.00;
+        this.alpha =4.6;
+        this.beta = 0.00;
+        this.gamma = 1;
+        this.delta = 4; 
+        this.epsilon = 1.6;
+        this.lampOn = true;
+        this.videoOn = false; 
+        this.apriFinestraCucinaDx = 0.00;
+        this.apriFinestraCucinaSx = 0.00; 
+        this.apriPortaCuc = 0.00;      
+      };
+
+      var gui = new dat.GUI(); 
+      var axis_control = gui.add(controls, 'showAxisHelper');
+      var apriAntaDx_control = gui.add(controls,'apriAntaDx',0,Math.PI/2);
+      var apriAntaSx_control = gui.add(controls,'apriAntaSx',-Math.PI/2,0);
+      var apriFinestraStanzaValeDx_control = gui.add(controls,'apriFinestraStanzaValeDx',0,Math.PI/2);
+      var apriFinestraStanzaValeSx_control = gui.add(controls,'apriFinestraStanzaValeSx',-Math.PI/2,0);
+      var lampOn_control = gui.add(controls,'lampOn');
+      var apriPortaVal_control = gui.add(controls,'apriPortaVal',0,Math.PI/2);
+      var alpha_control = gui.add(controls,'alpha',0,2*Math.PI);
+      var beta_control = gui.add(controls,'beta',0,Math.PI/2);
+      var gamma_control = gui.add(controls,'gamma',0,Math.PI/2);
+      var delta_control = gui.add(controls,'delta',0,2*Math.PI);
+      var epsilon_control = gui.add(controls,'epsilon',0,Math.PI/2);
+      var videoOn_control = gui.add(controls,'videoOn');
+      var apriFinestraCucinaDx_control = gui.add(controls,'apriFinestraCucinaDx',-Math.PI/2,0);
+      var apriFinestraCucinaSx_control = gui.add(controls,'apriFinestraCucinaSx',0,Math.PI/2);
+      var apriPortaCuc_control = gui.add(controls,'apriPortaCuc',0,Math.PI/2);
+
+      lampOn_control.onChange(function(value){        
+        
+        if(!controls.lampOn){
+          luceVale.intensity=0;
+          luceVale.shadowDarkness = 0;
+          luceValeLampadina.intensity=0;
+          luceValeLampadina.shadowDarkness =0;
+          luceValeLampadina2.intensity=0;
+          luceValeLampadina2.shadowDarkness =0;
+        }
+        else{
+          luceVale.intensity=1;
+          luceVale.shadowDarkness = 0.5;
+          luceValeLampadina.intensity=5;
+          luceValeLampadina.shadowDarkness =0.5;
+          luceValeLampadina2.intensity=5;
+          luceValeLampadina2.shadowDarkness =0.5;
+        }
+        
+      });
+
+      videoOn_control.onChange(function(value){
+        if(controls.videoOn)
+          video.play();
+        else
+          video.pause();
+      });
+
+      function createMeshRep2(geom, imageFile,rep) {
+        var texture = THREE.ImageUtils.loadTexture("assets/textures/general/" + imageFile)
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.x = rep;
+        texture.repeat.y = rep;
+        var mat = new THREE.MeshLambertMaterial();
+        mat.map = texture;
+        mat.side = THREE.DoubleSide;
+        var mesh = new THREE.Mesh(geom, mat);
+        return mesh;
+      }
+
+      function createMeshRep(geom, imageFile) {
+        var texture = THREE.ImageUtils.loadTexture("assets/textures/general/" + imageFile)
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.x = 4;
+        texture.repeat.y = 4;
+        var mat = new THREE.MeshLambertMaterial();
+        mat.map = texture;
+        mat.side = THREE.DoubleSide;
+        var mesh = new THREE.Mesh(geom, mat);
+        return mesh;
+      }
+
+      function createMesh(geom, imageFile) {
+        var texture = THREE.ImageUtils.loadTexture("assets/textures/general/" + imageFile)
+        var mat = new THREE.MeshLambertMaterial();
+        mat.map = texture;
+        mat.side = THREE.DoubleSide;
+        var mesh = new THREE.Mesh(geom, mat);
+        return mesh;
+      }
+
+      function prova(obj){
+         var prova = new TWEEN.Tween(obj.rotation)
+          .to({z: Math.PI/2}, 2000)
+          .start();
+      }
+      
+      document.addEventListener('mousedown',onDocumentMouseDown,false);
+      function onDocumentMouseDown( event ) {
+
+        event.preventDefault();
+        var vector = new THREE.Vector3((event.clientX / window.innerWidth)*2-1,-(event.clientY/window.innerHeight)*2+1,0.5);
+        projector.unprojectVector( vector, camera );
+        var obj = [door,fin,door_cuc,fin2_cuc,door_matr]
+        var obj1 = [fin2,fin_cuc]
+        var raycaster = new THREE.Raycaster(camera.position,vector.sub(camera.position).normalize());
+        var intersects = raycaster.intersectObjects(obj);
+        var intersects1 = raycaster.intersectObjects(obj1);
+
+        if ( intersects.length > 0 ) {
+          console.log(intersects[0].object);
+          prova(intersects[0].object.parent);
+          //intersects[0].object.parent.rotation.z = Math.PI/2;
+        }
+        if ( intersects1.length > 0 ) {
+          intersects1[0].object.parent.rotation.z = -Math.PI/2;
+        }
+
+
+      }
+
+
+     
+
+      render();
+
+      function render() {
+        stats.update();
+        trackballControls.update();
+        TWEEN.update();
+
+        perno.rotation.z = controls.apriAntaDx;
+        perno2.rotation.z = controls.apriAntaSx;
+
+        braccio1.rotation.z = controls.alpha;
+        braccio1.sphere.rotation.x = controls.beta;
+        braccio2.rotation.x = controls.gamma;
+        braccio1.perno2.rotation.z = controls.delta; 
+        lastsphere.rotation.x = controls.epsilon;
+
+        if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
+          videoImageContext.drawImage( video, 0, 0 );
+          if ( videoTexture ) 
+            videoTexture.needsUpdate = true;
+        }
+
+        if(window.location.parti)
+          movieScreen.visible = true;
+
+        mirrorCube.visible = false;
+        mirrorCubeCamera.updateCubeMap( webGLRenderer, scene );
+        mirrorCube.visible = true;
+
+        // render using requestAnimationFrame
+        requestAnimationFrame(render);
+        webGLRenderer.render(scene, camera);
+      }
+
+      function initStats() {
+        var stats = new Stats();
+        stats.setMode(0); // 0: fps, 1: ms
+        $('body').append(stats.domElement);
+        return stats;
+      }
+    });
+  </script>  
+ </body>
+</html>

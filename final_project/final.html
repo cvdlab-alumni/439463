@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <title>Example 1 - Basic skeleton</title> 
+  <style>
+    body{
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #stats {  /* Align stats top-left */
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+
+    #blocker {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+      }
+
+      #instructions {
+        width: 100%;
+        height: 100%;
+
+        display: -webkit-box;
+        display: -moz-box;
+        display: box;
+
+        -webkit-box-orient: horizontal;
+        -moz-box-orient: horizontal;
+        box-orient: horizontal;
+
+        -webkit-box-pack: center;
+        -moz-box-pack: center;
+        box-pack: center;
+
+        -webkit-box-align: center;
+        -moz-box-align: center;
+        box-align: center;
+
+        color: #ffffff;
+        text-align: center;
+        cursor: pointer;
+      }
+
+
+
+
+  #pointer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+    width: 30px;
+    height: 30px;
+    display: none;
+    background-image: url("assets/textures/general/Immagine1.gif");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  </style> 
+  </head> 
+  <body>
+    
+    <!-- JavaScript libraries -->
+    <div id="pointer"></div>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script> 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+    <script src="assets/libs/TrackballControls.js"></script>
+    <script src="assets/libs/OBJLoader.js"></script>
+    <script src="assets/libs/OBJMTLLoader.js"></script> 
+    <script src="assets/libs/MTLLoader.js"></script> 
+    <script src="assets/libs/tween.min.js"></script>
+    <script src="assets/libs/PointerLockControls.js"></script>
+
+
+    <script src="/script/makeHouse.js"></script>
+    <script src="/script/utility.js"></script>
+    <script src="/script/makeLight.js"></script>
+    <script src="/script/makeWall.js"></script>
+    <script src="/script/makeWindows.js"></script>
+    <script src="/script/makeDoor.js"></script>
+    <script src="/script/makeCarpet.js"></script>
+    <script src="/script/makeFloor.js"></script>
+    <script src="/script/makeKitchen.js"></script>
+    <script src="/script/makeValeRoom.js"></script>
+    <script src="/script/makeRoomM.js"></script>
+    <script src="/script/makeBath.js"></script>
+    <script src="/script/makePierRoom.js"></script>
+    <script src="/script/prova.js"></script>
+    <script src="/script/makeSala.js"></script>
+    <script src="/script/makeBalcone.js"></script>
+    <script src="/script/makeGiardino.js"></script>
+    <script src="/script/makeCorridoio.js"></script>
+    <script src="/script/makeRoof.js"></script>
+    <script src="assets/libs/FirstPersonControls.js"></script>
+
+    <script src="/script/OrbitControls.js"></script>
+    <script src="/script/ParticleEngine.js"></script>
+    <script src="/script/ParticleEngine2.js"></script>
+    <script src="/script/ParticleEngine3.js"></script>
+    <script src="/script/ParticleEngineExamples.js"></script>
+
+    <!-- Code to display an information button and box when clicked. -->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <link rel=stylesheet href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <link rel=stylesheet href="info.css"/>
+    <script src="info.js"></script>
+    <div id="infoButton"></div>
+    <div id="infoBox" title="Benvenuto!!">
+    Benvenuto in casa Giuliani !! Non fare il furbo, per interagire con la casa suona prima il campanello.... bussare non servirà a nulla :)
+    </div>
+
+    <!-- Javascript code that runs our Three.js examples --> 
+    <script>
+      $(function () {
+
+
+      var clock = new THREE.Clock();
+
+      var stats = initStats();
+
+      // create a scene, that will hold all our elements such as objects, cameras and lights.
+      scene = new THREE.Scene();
+
+      // create a camera, which defines where we're looking at.
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+      // create trackball controls
+      trackballControls = new THREE.TrackballControls(camera);
+      projector = new THREE.Projector();
+
+      // create a render and set the size
+      var webGLRenderer = new THREE.WebGLRenderer();
+      webGLRenderer.setClearColor(new THREE.Color(0xeeeeee, 1.0));
+      webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+      projector = new THREE.Projector();
+      // position and point the camera to the center of the scene
+      camera.position.x = 0;
+      camera.position.y = -80;
+      camera.position.z = 50;
+
+
+      camera.lookAt(new THREE.Vector3(0, 0, 0));
+      //camera.up = new THREE.Vector3(0,1,0);
+
+      // add the output of the renderer to the html element
+      $('body').append(webGLRenderer.domElement);
+
+      // call the render function
+      var step = 0;
+      
+      var axisHelper = new THREE.AxisHelper(3);
+      scene.add(axisHelper);
+
+      House = new THREE.Object3D();
+
+      makeHouse(House);
+      var list = makeLight(House);
+      var spotLightAll = list[0];
+      var spotLightAll2 = list[1];
+      var spotLightAll3 = list[2];
+      makeWall(House);
+      makeWindows(House);
+      makeCarpet(House);
+      makeFloor(House);
+      makeDoor(House);
+      var ret = makeKitchen(House);
+      var video = ret[0];
+      var movieScreen = ret[1];
+      makeValeRoom(House);
+      makeRoomM(House);
+      var ret2 = makeBath(House);
+      var mirrorCube = ret2[0];
+      var mirrorCubeCamera = ret2[1];
+      
+      var ret2 =makePierRoom(House);
+      var videoC = ret2[0];
+      var movieScreenC = ret2[1];
+      var videoCImageContext = ret2[2];
+      var videoCTexture = ret2[3];
+      var audio = makeSala(House);
+      makeBalcone(House);
+      makeGiardino(House);
+      makeCorridoio(House);
+      var roof = makeRoof(House);
+      roof.visible = false;
+      scene.add(House);
+
+      engine = new ParticleEngine();
+      engine.setValues( Examples.fireball );
+      //engine.initialize();
+      engine.visible = false;
+      window.location.fuocoAcceso = false;
+
+      engine2 = new ParticleEngine2();
+      engine2.setValues( Examples.fornello );
+      window.location.fornelloAcceso = false;
+
+      engine3 = new ParticleEngine3();
+      engine3.setValues(Examples.smoke);
+      engine3.initialize();
+
+      //engine2.initialize();
+
+      var controls = new function () {
+        this.showAxisHelper = true;
+        this.pointerLock = false; 
+        this.luceDavanti = true;
+        this.luceSx = true;
+        this.luceDx = true;
+        this.roof = false;
+        this.night = false;
+      };
+
+      window.location.fp = false;
+      window.location.night = false;
+
+      var gui = new dat.GUI(); 
+      var axis_control = gui.add(controls, 'showAxisHelper');
+      var pointerLock_control = gui.add(controls,'pointerLock');
+      var luceDavanti_control = gui.add(controls,'luceDavanti');
+      var luceSx_control = gui.add(controls,'luceSx');
+      var luceDx_control = gui.add(controls,'luceDx');
+      var roof_control = gui.add(controls,'roof');
+      var night_control = gui.add(controls, 'night');
+
+
+
+      night_control.onChange(function (value) {
+        if(value){
+          window.location.night = true;
+        }
+        else{
+          window.location.night = false;
+        }
+      });
+
+      var start = startFPS;
+      pointerLock_control.onChange(function(value){
+        if(value){
+          camera.position.set(0,10,0);
+          House.rotation.x = -Math.PI/2;
+          wallpaper.rotation.x = 2*Math.PI;
+          window.location.pointerLock = true;
+          start();
+
+        }
+
+     });
+
+      luceDavanti_control.onChange(function(value){
+        if(!value){
+          spotLightAll2.intensity = 0;
+        }
+        else{
+          spotLightAll2.intensity = 1;
+        }
+      })
+
+      luceSx_control.onChange(function(value){
+        if(!value){
+          spotLightAll.intensity = 0;
+        }
+        else{
+          spotLightAll.intensity = 1;
+        }
+      })
+
+      luceDx_control.onChange(function(value){
+        if(!value){
+          spotLightAll3.intensity = 0;
+        }
+        else{
+          spotLightAll3.intensity = 1;
+        }
+      })
+
+      roof_control.onChange(function(value){
+        if(value){
+          roof.visible = true;
+        } else{
+          roof.visible= false;
+        }
+      })
+
+      var urls = [
+        '/assets/textures/general/canyon/jajcannons1_back.jpg',
+        '/assets/textures/general/canyon/jajcannons1_front.jpg',
+        '/assets/textures/general/canyon/jajcannons1_top.jpg',
+        '/assets/textures/general/canyon/prato.jpg',
+        '/assets/textures/general/canyon/jajcannons1_right.jpg',
+        '/assets/textures/general/canyon/jajcannons1_left.jpg'
+      ];
+      // wrap it up into the object that we need
+      cubemap = THREE.ImageUtils.loadTextureCube(urls);
+
+      // set the format, likely RGB unless you've gone crazy
+      cubemap.format = THREE.RGBFormat;
+      var materialArray = [];
+      for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture( urls[i]), side: THREE.BackSide }));
+      var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+      var wallpaperGeometry = new THREE.BoxGeometry(1000,1000,1000);
+      var wallpaper= new THREE.Mesh(wallpaperGeometry, skyMaterial);
+      wallpaper.rotation.x = Math.PI/2;
+      scene.add(wallpaper);
+
+
+      var image1 = "assets/textures/general/night.jpg";
+      var skyBoxGeometry = new THREE.BoxGeometry( 600, 700, 800 );
+      var materialArray = [];
+      for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({
+          map: THREE.ImageUtils.loadTexture( image1),
+          side: THREE.BackSide
+        }));
+      var skyMaterial1 = new THREE.MeshFaceMaterial( materialArray );
+      var skyBox2 = new THREE.Mesh( skyBoxGeometry, skyMaterial1 );
+      skyBox2.position.set(0,0,-120);
+
+      render();
+
+      function render() {
+        stats.update();
+        trackballControls.update();
+        TWEEN.update();
+        
+        if (controls.pointerLock === true) 
+          computeFPControls();
+
+        TWEEN.update();
+/*
+        if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
+          videoImageContext.drawImage( video, 0, 0 );
+          if ( videoTexture ) 
+            videoTexture.needsUpdate = true;
+        }
+
+        if(window.location.parti)
+          movieScreen.visible = true;
+
+        if(window.location.fp){
+          var delta = clock.getDelta();
+          trackballControls.enabled = false;
+          webGLRenderer.clear();
+          camControls.update(delta);
+
+        }*/
+
+
+        //in questo modo si sente solo nella stanza specifica
+
+        if ( camera.position.x >= 56 && camera.position.x<= 84 && camera.position.y>58 && camera.position.y<109 && camera.position.z>=0 && camera.position.z <= 25) {
+          videoC.volume = 1;
+
+        } else 
+          videoC.volume =0;
+
+
+        if ( videoC.readyState === video.HAVE_ENOUGH_DATA ) {
+          videoCImageContext.drawImage( videoC, 0, 0 );
+          if ( videoTexture ) {
+            videoCTexture.needsUpdate = true;
+          }
+        }
+
+        mirrorCube.visible = false;
+        mirrorCubeCamera.updateCubeMap( webGLRenderer, scene );
+        mirrorCube.visible = true;
+
+        if(window.location.fuocoAcceso){
+          var dt = clock.getDelta();
+          engine.update( dt * 0.5 );
+        }
+
+        if(window.location.fornelloAcceso){
+          var dt2 = clock.getDelta();
+          engine2.update(dt2 * 0.5);
+        }else{
+          var dt3 = clock.getDelta();
+          engine3.update(dt3 * 0.5);
+        }
+
+        if (window.location.night) {
+          spotLightAll2.intensity = 0;
+          spotLightAll.intensity = 0;
+          spotLightAll3.intensity = 0;
+          scene.remove(wallpaper);
+          scene.add(skyBox2);
+          console.log("mamma");
+        } else {
+          spotLightAll2.intensity = 1;
+          spotLightAll.intensity = 1;
+          spotLightAll3.intensity = 1;
+          scene.remove(skyBox2);
+          scene.add(wallpaper);
+        }
+
+
+        // render using requestAnimationFrame
+        requestAnimationFrame(render);
+        webGLRenderer.render(scene, camera);
+      }
+
+      function initStats() {
+        var stats = new Stats();
+        stats.setMode(0); // 0: fps, 1: ms
+        $('body').append(stats.domElement);
+        return stats;
+      }
+
+      });
+    </script>  
+ </body>
+</html>
