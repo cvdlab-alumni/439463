@@ -6,7 +6,7 @@
 Valentina Giuliani - 439463
 --------------------------
 
-*[Avvia il progetto] (https://valentinagiuliani.github.io/)
+[Avvia il progetto] (https://valentinagiuliani.github.io/)
 
 **Code organization :**
 
@@ -26,21 +26,19 @@ Valentina Giuliani - 439463
 
 **Graphic techniques :**
 
-* STATIC TEXTURES AND BUMP MAPS for several elements such as floors, walls, windows, doors and wall lamps. 
-* KEYFRAME for robot and door animations
-* VIDEO TEXTURE for the tv screen
-* AUDIO for the mp3 base player
-* SKYBOX with day/night switch
-* AUDIO FADING for video and audio elements
-* DIRECTIONAL LIGHT + AMBIENT LIGHT for day/night effect
-* CONTROL PANEL
+* STATIC TEXTURES: per pareti,pavimenti e oggetti vari.
+* VIDEO TEXTURE: per la tv
+* AUDIO: per lo stereo, teiera, aspirapolvere, citofono.
+* SKYBOX: per lo switch tra giorno/notte
+* AUDIO FADING: per il video
+* SPOTLIGH: presenti in ogni stanza e all'esterno della casa
+* GUI CONTROLS
 * OBJ + MTL IMPORT for room detailing
 * **AUTOMATIZED ROOM LIGHTS** 
 * **MIRROR EFFECT** 
-* **FIRST PERSON CAMERA** with camera switch controls
-* **FIXED CAMERA** for robot view
-* **PARTICLE ENGINE** for clouds
-* **OBJECT PICKING** for element interactions
-* **OBJECT CONTROL** for mouse control door and windows opening
+* **POINTER LOCK CAMERA**  con possibilità di switch tra una visuale e l'altra
+* **PARTICLE ENGINE**: per il fuoco nel camino e per il fuoco sui fornelli
+* **OBJECT PICKING**: si possono aprire porte e finestre e interagire con gli oggetti in casa
+* ** TWEEN: utilizzato per animazioni
 
 </pre></body></html>
