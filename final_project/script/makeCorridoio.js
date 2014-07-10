@@ -1,10 +1,10 @@
 function makeCorridoio(scene){
 
-	audio2 = new Sound( [ 'audio/aspir.mp3' ]);
-		//audio.play();
-		window.location.playSound = false;
+    audio2 = new Sound( [ 'audio/aspir.mp3' ]);
+        //audio.play();
+        window.location.playSound = false;
 
-	var loader6 = new THREE.OBJMTLLoader();
+    var loader6 = new THREE.OBJMTLLoader();
     loader6.addEventListener('load', function (event) {
 
         var object = event.content;
@@ -27,7 +27,7 @@ function makeCorridoio(scene){
 
 
         document.addEventListener('mousedown',onDocumentMouseDown,false);
-      	function onDocumentMouseDown(event) {
+        function onDocumentMouseDown(event) {
 
         event.preventDefault();
         if(!window.location.pointerLock){
@@ -37,13 +37,13 @@ function makeCorridoio(scene){
             var intersects = raycaster.intersectObjects([aspir]);
             if(window.location.campanello){
                 if ( intersects.length > 0 ) {
-            	   if(!window.location.audioOn){
-                	   aspira(intersects[0].object);
-                	   audio2.play();
-                	   window.location.audioOn = true;
+                   if(!window.location.audioOn){
+                       aspira(intersects[0].object);
+                       audio2.play();
+                       window.location.audioOn = true;
                     }else{
-                	   audio2.pause();
-                	   window.location.audioOn = false;
+                       audio2.pause();
+                       window.location.audioOn = false;
                     }
                 }
             }
@@ -106,6 +106,8 @@ function makeCorridoio(scene){
         {side: THREE.DoubleSide}
       );
 
+      var audioTel = new Sound( [ 'audio/telefono.wav' ]);
+
       var loader = new THREE.OBJMTLLoader();
       loader.addEventListener('load', function (event) {
 
@@ -129,8 +131,40 @@ function makeCorridoio(scene){
       );
 
 
+    var telGeometry = new THREE.BoxGeometry(1,1,1);
+    var telMaterial = new THREE.MeshLambertMaterial({color: 0xF5DEB3});
+    var tel = new THREE.Mesh(telGeometry,telMaterial);
+    tel.position.set(34,35.5,4);
+    tel.visible = false;
+    scene.add(tel);
 
+    document.addEventListener('mousedown',onDocumentMouseDown,false);
+        function onDocumentMouseDown(event) {
 
+        event.preventDefault();
+        if(!window.location.pointerLock){
+            var vector = new THREE.Vector3((event.clientX / window.innerWidth)*2-1,-(event.clientY/window.innerHeight)*2+1,0.5);
+            projector.unprojectVector( vector, camera );
+            var raycaster = new THREE.Raycaster(camera.position,vector.sub(camera.position).normalize());
+            var intersects = raycaster.intersectObjects([tel]);
+            if(window.location.campanello){
+                if ( intersects.length > 0 ) 
+                       audioTel.play();
+            }
+        }
+        else{
+            event.preventDefault();
+            var vector2 = new THREE.Vector3(10,10,10);
+            projector.unprojectVector( vector2, camera );
+            var raycaster = new THREE.Raycaster(vector2,controls.getDirection(new THREE.Vector3(0, 0, 0)).clone());
+            var intersects = raycaster.intersectObjects([tel]);
 
+            if(window.location.campanello){
+                if ( intersects.length > 0 ) 
+                       audioTel.play();
+                    
+                }
+            }
+        }
 
 }
