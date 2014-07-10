@@ -6,9 +6,11 @@
 Valentina Giuliani - 439463
 --------------------------
 
+*[Avvia il progetto] (https://valentinagiuliani.github.io/)
+
 **Code organization :**
 
-* [index](index.html) scripts recall and rendering.
+* [index](index.html): pagina html di avvio in cui viene inizializzata la scena.
 * [makeHouse](script/makeHouse.js):crea la casa importanto l'obj provaCasa.obj realizzato in lar.
 * [makeBalcone] (script/makeBalcone.js): crea il balcone dell'appartamento.
 * [makeCarpet] (script/makeCarpet.js) : realizza tutti i tappeti presenti nella casa.
