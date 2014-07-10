@@ -7,6 +7,7 @@ Valentina Giuliani - 439463
 --------------------------
 
 [Avvia il progetto] (https://valentinagiuliani.github.io/)
+[Piantina casa] (piantina.jpg)
 
 **Code organization :**
 
