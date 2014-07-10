@@ -340,7 +340,8 @@ function makeKitchen(scene){
             var vector2 = new THREE.Vector3(10,10,10);
             projector.unprojectVector( vector2, camera );
             var raycaster = new THREE.Raycaster(vector2,controls.getDirection(new THREE.Vector3(0, 0, 0)).clone());
-            var intersects = raycaster.intersectObjects([aspir]);
+            var intersects = raycaster.intersectObjects([cub]);
+            var intersects2 = raycaster.intersectObjects([bot])
             if(window.location.campanello){
                 if ( intersects.length > 0 ) {
                   if(!window.location.fornelloAcceso){
@@ -369,7 +370,6 @@ function makeKitchen(scene){
         }
 
       }
-
 
 
       return toreturn;
