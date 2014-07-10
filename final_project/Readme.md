@@ -40,6 +40,6 @@ Valentina Giuliani - 439463
 * **POINTER LOCK CAMERA**  con possibilità di switch tra una visuale e l'altra
 * **PARTICLE ENGINE**: per il fuoco nel camino e per il fuoco sui fornelli
 * **OBJECT PICKING**: si possono aprire porte e finestre e interagire con gli oggetti in casa
-* ** TWEEN: utilizzato per animazioni
+* ** TWEEN: utilizzato per animazioni **
 
 </pre></body></html>
