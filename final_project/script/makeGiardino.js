@@ -23,4 +23,27 @@ function makeGiardino(scene){
         {side: THREE.DoubleSide}
       );
 
+      var loader = new THREE.OBJMTLLoader();
+      loader.addEventListener('load', function (event) {
+
+        var object = event.content;
+
+        var wing2 = object.children[0];
+        var wing1 = object.children[1];
+
+        mesh = object;
+        mesh.rotation.x = Math.PI/2;
+        mesh.scale.set(0.1,0.1,0.1);
+        mesh.position.set(20,-7,0)
+        scene.add(mesh);
+      
+      });
+
+
+      loader.load(
+        '/giardino/mofx_mailbox.obj',
+        '/giardino/mofx_mailbox.mtl',
+        {side: THREE.DoubleSide}
+      );
+
 }
