@@ -11,10 +11,14 @@ Valentina Giuliani - 439463
 * [index](index.html) scripts recall and rendering.
 * [makeHouse](script/makeHouse.js):crea la casa importanto l'obj provaCasa.obj realizzato in lar.
 * [makeBalcone] (script/makeBalcone.js): crea il balcone dell'appartamento.
-* [makeBath](script/makeBath.js): realizza il bagno .
 * [makeCarpet] (script/makeCarpet.js) : realizza tutti i tappeti presenti nella casa.
+* [makeWall] (script/makeWall.js) : applica le texture di tutte le pareti.
+* [makeRoof] (script/makeRoof.js) : realizza il tetto.
+* [makeWindows] (script/makeWindows.js) : realizza le finestre della casa.
 * [makeDoor] (script/makeDoor.js) : realizza ttte le porte della casa gestendo anche le aperture e le chiusure
-
+* [makeFloor] (script/makeFloor.js) : realizza tutti i pavimenti della casa applicando specifiche texture.
+* [makeGiardino] (script/makeGiardino.js) : realizza una palma nel giardino.
+* [makeBath](script/makeBath.js),[makeKitchen] (script/makeKitchen.js) ,[makePierRoom] (script/makePierRoom), [makeValeRoom] (script/makeValeRoom), [makeRoomM] (script/makeRoomM), [makeSala] (script/makeSala) : realizzano rispettivamente il bagno,la cucina, la camera di Pierpaolo, camera di valentina, camera matrimoniale e il salotto
 
 =======
 
