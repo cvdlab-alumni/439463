@@ -1,7 +1,7 @@
 function makeKitchen(scene){
 
       var loader3 = new THREE.OBJLoader();
-      loader3.load('/cucina/frigo.obj', function (obj) {
+      loader3.load('cucina/frigo.obj', function (obj) {
 
         global_o = obj;
 
@@ -56,8 +56,8 @@ function makeKitchen(scene){
 
 
       loaderprova.load(
-        '/cucina/chair.obj', 
-        '/cucina/chair.mtl', 
+        'cucina/chair.obj', 
+        'cucina/chair.mtl', 
         {side: THREE.DoubleSide}
       );
 
@@ -78,8 +78,8 @@ function makeKitchen(scene){
       });
 
       loaderprova.load(
-        '/cucina/mano_cooktop.obj', 
-        '/cucina/mano_cooktop.mtl', 
+        'cucina/mano_cooktop.obj', 
+        'cucina/mano_cooktop.mtl', 
         {side: THREE.DoubleSide}
       );
 
@@ -100,8 +100,8 @@ function makeKitchen(scene){
       });
 
       loaderprova.load(
-        '/cucina/boiler.obj', 
-        '/cucina/boiler.mtl', 
+        'cucina/boiler.obj', 
+        'cucina/boiler.mtl', 
         {side: THREE.DoubleSide}
       );
 
@@ -122,8 +122,8 @@ function makeKitchen(scene){
       });
 
       loaderprova.load(
-        '/cucina/kitchenSinkWithMarble.obj', 
-        '/cucina/kitchenSinkWithMarble.mtl', 
+        'cucina/kitchenSinkWithMarble.obj', 
+        'cucina/kitchenSinkWithMarble.mtl', 
         {side: THREE.DoubleSide}
       );
 
@@ -241,8 +241,8 @@ function makeKitchen(scene){
 
 
       loader.load(
-        '/cucina/apples.obj', 
-        '/cucina/apples.mtl', 
+        'cucina/apples.obj', 
+        'cucina/apples.mtl', 
         {side: THREE.DoubleSide}
       );
 
@@ -268,8 +268,8 @@ function makeKitchen(scene){
 
 
       loader6.load(
-        '/sala/hanging-restaurant-light.obj',
-        '/sala/hanging-restaurant-light.mtl',
+        'sala/hanging-restaurant-light.obj',
+        'sala/hanging-restaurant-light.mtl',
         {side: THREE.DoubleSide}
       );
 

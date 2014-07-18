@@ -18,8 +18,8 @@ function makeGiardino(scene){
 
 
       loader.load(
-        '/giardino/palm.obj',
-        '/giardino/palm.mtl',
+        'giardino/palm.obj',
+        'giardino/palm.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -41,8 +41,8 @@ function makeGiardino(scene){
 
 
       loader.load(
-        '/giardino/mofx_mailbox.obj',
-        '/giardino/mofx_mailbox.mtl',
+        'giardino/mofx_mailbox.obj',
+        'giardino/mofx_mailbox.mtl',
         {side: THREE.DoubleSide}
       );
 

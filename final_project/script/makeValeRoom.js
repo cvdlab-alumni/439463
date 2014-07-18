@@ -118,8 +118,8 @@ function makeValeRoom(scene){
 
 
       loader6.load(
-        '/sala/hanging-restaurant-light.obj',
-        '/sala/hanging-restaurant-light.mtl',
+        'sala/hanging-restaurant-light.obj',
+        'sala/hanging-restaurant-light.mtl',
         {side: THREE.DoubleSide}
       );
 

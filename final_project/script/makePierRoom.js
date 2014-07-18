@@ -67,8 +67,8 @@ function makePierRoom(scene){
       });
 
       loaderpier.load(
-        '/scrivania-pier/bureau3.obj',
-        '/scrivania-pier/bureau3.mtl',
+        'scrivania-pier/bureau3.obj',
+        'scrivania-pier/bureau3.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -123,8 +123,8 @@ function makePierRoom(scene){
       });
 
       loaderpier2.load(
-        '/chair-pier/officeChair.obj',
-        '/chair-pier/officeChair.mtl',
+        'chair-pier/officeChair.obj',
+        'chair-pier/officeChair.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -145,8 +145,8 @@ function makePierRoom(scene){
       });
 
       loaderpier3.load(
-        '/scrivania-pier/monitorLCD.obj',
-        '/scrivania-pier/monitorLCD.mtl',
+        'scrivania-pier/monitorLCD.obj',
+        'scrivania-pier/monitorLCD.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -180,8 +180,8 @@ function makePierRoom(scene){
 
 
       loader6.load(
-        '/sala/hanging-restaurant-light.obj',
-        '/sala/hanging-restaurant-light.mtl',
+        'sala/hanging-restaurant-light.obj',
+        'sala/hanging-restaurant-light.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -285,8 +285,8 @@ function makePierRoom(scene){
       });
 
       loaderpier4.load(
-        '/scrivania-pier/remote.obj',
-        '/scrivania-pier/remote.mtl',
+        'scrivania-pier/remote.obj',
+        'scrivania-pier/remote.mtl',
         {side: THREE.DoubleSide}
       );
 

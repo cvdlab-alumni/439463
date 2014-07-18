@@ -22,8 +22,8 @@ function makeBalcone(scene){
 
 
     loader.load(
-    	'/balcone/blackDeckChair.obj',
-        '/balcone/blackDeckChair.mtl',
+    	'balcone/blackDeckChair.obj',
+        'balcone/blackDeckChair.mtl',
         {side: THREE.DoubleSide}
     );
 
@@ -47,8 +47,8 @@ function makeBalcone(scene){
 
 
     loader2.load(
-    	'/balcone/blackDeckTable.obj',
-        '/balcone/blackDeckTable.mtl',
+    	'balcone/blackDeckTable.obj',
+        'balcone/blackDeckTable.mtl',
         {side: THREE.DoubleSide}
     );
 
@@ -72,8 +72,8 @@ function makeBalcone(scene){
 
 
     loader3.load(
-    	'/balcone/potplant2.obj',
-        '/balcone/potplant2.mtl',
+    	'balcone/potplant2.obj',
+        'balcone/potplant2.mtl',
         {side: THREE.DoubleSide}
     );
 

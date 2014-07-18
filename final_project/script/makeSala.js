@@ -18,8 +18,8 @@ function makeSala(scene){
 
 
       loader.load(
-        '/sala/largeCouch.obj',
-        '/sala/largeCouch.mtl',
+        'sala/largeCouch.obj',
+        'sala/largeCouch.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -41,8 +41,8 @@ function makeSala(scene){
 
 
       loader2.load(
-        '/sala/salontafel.obj',
-        '/sala/salontafel.mtl',
+        'sala/salontafel.obj',
+        'sala/salontafel.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -64,8 +64,8 @@ function makeSala(scene){
 
 
       loader3.load(
-        '/sala/mini_stereo.obj',
-        '/sala/mini_stereo.mtl',
+        'sala/mini_stereo.obj',
+        'sala/mini_stereo.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -98,7 +98,8 @@ function makeSala(scene){
 
 
       loader4.load(
-        '/sala/cheminee.obj',
+        'sala/cheminee.obj',
+        'bagno/lavandinobagno.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -121,8 +122,8 @@ function makeSala(scene){
 
 
       loader5.load(
-        '/sala/fre005.obj',
-        '/sala/fre005.mtl',
+        'sala/fre005.obj',
+        'sala/fre005.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -144,8 +145,8 @@ function makeSala(scene){
 
 
       loader6.load(
-        '/sala/hanging-restaurant-light.obj',
-        '/sala/hanging-restaurant-light.mtl',
+        'sala/hanging-restaurant-light.obj',
+        'sala/hanging-restaurant-light.mtl',
         {side: THREE.DoubleSide}
       );
 

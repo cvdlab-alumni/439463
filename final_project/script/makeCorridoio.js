@@ -77,8 +77,8 @@ function makeCorridoio(scene){
 
 
     loader6.load(
-        '/sala/aspirateur.obj',
-        '/sala/aspirateur.mtl',
+        'sala/aspirateur.obj',
+        'sala/aspirateur.mtl',
         {side: THREE.DoubleSide}
     );
 
@@ -101,8 +101,8 @@ function makeCorridoio(scene){
       });
 
       loader.load(
-        '/corridoio/table_wood_and_iron.obj',
-        '/corridoio/table_wood_and_iron.mtl',
+        'corridoio/table_wood_and_iron.obj',
+        'corridoio/table_wood_and_iron.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -125,8 +125,8 @@ function makeCorridoio(scene){
       });
 
       loader.load(
-        '/corridoio/iphone.obj',
-        '/corridoio/iphone.mtl',
+        'corridoio/iphone.obj',
+        'corridoio/iphone.mtl',
         {side: THREE.DoubleSide}
       );
 

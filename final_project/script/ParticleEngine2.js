@@ -420,7 +420,7 @@ ParticleEngine2.prototype.update = function(dt)
 	if ( this.emitterAge > this.emitterDeathAge )  this.emitterAlive = false;
 }
 
-prototype.ParticleEngine2.destroy = function()
+ParticleEngine2.prototype.destroy = function()
 {
     House.remove( this.particleMesh );
 }

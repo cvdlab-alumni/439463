@@ -19,7 +19,8 @@ function makeBath(scene){
       });
 
       loaderbagno.load(
-        '/bagno/lavandinobagno.obj',
+        'bagno/lavandinobagno.obj',
+        'bagno/lavandinobagno.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -42,7 +43,8 @@ function makeBath(scene){
       });
 
       loaderbagno2.load(
-        '/bagno/vasca.obj',
+        'bagno/vasca.obj',
+        'bagno/lavandinobagno.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -65,7 +67,8 @@ function makeBath(scene){
       });
 
       loaderbagno3.load(
-        '/bagno/water.obj',
+        'bagno/water.obj',
+        'bagno/lavandinobagno.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -99,8 +102,8 @@ function makeBath(scene){
 
 
       loader6.load(
-        '/sala/hanging-restaurant-light.obj',
-        '/sala/hanging-restaurant-light.mtl',
+        'sala/hanging-restaurant-light.obj',
+        'sala/hanging-restaurant-light.mtl',
         {side: THREE.DoubleSide}
       );
 

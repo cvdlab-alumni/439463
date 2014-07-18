@@ -77,8 +77,8 @@ function makeRoomM(scene){
       });
 
       loaderprova3.load(
-        '/camera-matrimoniale/Pillow_Obj.obj',
-        '/camera-matrimoniale/Pillow_Obj.mtl',
+        'camera-matrimoniale/Pillow_Obj.obj',
+        'camera-matrimoniale/Pillow_Obj.mtl',
         {side: THREE.DoubleSide}
       );
 
@@ -100,8 +100,8 @@ function makeRoomM(scene){
 
 
       loader6.load(
-        '/sala/hanging-restaurant-light.obj',
-        '/sala/hanging-restaurant-light.mtl',
+        'sala/hanging-restaurant-light.obj',
+        'sala/hanging-restaurant-light.mtl',
         {side: THREE.DoubleSide}
       );
 
